@@ -1,0 +1,35 @@
+asgiref @ file:///home/bibekg/.cache/pypoetry/artifacts/cf/65/18/1451154a3ac6f8e749a6f7485ce77472fc1b339d4696f7a4cb816ac781/asgiref-3.5.2-py3-none-any.whl
+beautifulsoup4 @ file:///home/bibekg/.cache/pypoetry/artifacts/5a/51/f6/ced036f2b2ef6b792e8138e7bd9584e5eac63a3d4481b6e62402d050c7/beautifulsoup4-4.11.1-py3-none-any.whl
+certifi @ file:///home/bibekg/.cache/pypoetry/artifacts/b0/0d/df/4aa04d9b421fc5f1438b55d4b37516d21ef0ba40158bf7f9dfb28122ca/certifi-2022.6.15-py3-none-any.whl
+charset-normalizer @ file:///home/bibekg/.cache/pypoetry/artifacts/2b/25/ee/fa64b49cb44c9c392acf26e69ee8314d3b386932de86a9945f4ad2e633/charset_normalizer-2.0.12-py3-none-any.whl
+click==8.1.3
+cycler @ file:///home/bibekg/.cache/pypoetry/artifacts/b4/2b/30/aa2af4de03008423ba55fecdd8e774fcd9c985eb5d61957a914c0808b4/cycler-0.11.0-py3-none-any.whl
+Django @ file:///home/bibekg/.cache/pypoetry/artifacts/a6/d5/44/a73a4b49c4cbffbdd99a218d4139258260dc4ee675f9541492b8eea759/Django-4.0.5-py3-none-any.whl
+fonttools @ file:///home/bibekg/.cache/pypoetry/artifacts/0e/cc/42/0ebdf2086ec7a676e0a42bb6e9ad9a76907f6fca43b8baf0d65ef5cfb2/fonttools-4.34.4-py3-none-any.whl
+idna @ file:///home/bibekg/.cache/pypoetry/artifacts/d5/04/80/9c17fd3240a37d12ff2ef042b0306aeb1abd2d8b95f150fd60be938352/idna-3.3-py3-none-any.whl
+itsdangerous==1.1.0
+Jinja2==2.11.2
+joblib @ file:///home/bibekg/.cache/pypoetry/artifacts/a6/ca/34/f3a58b34616787c399095242ae8633fc32e061f8f76debd987dcecb325/joblib-1.1.0-py2.py3-none-any.whl
+kiwisolver @ file:///home/bibekg/.cache/pypoetry/artifacts/dd/2a/35/bfcba8da8ce4cdd201eee0c2d2a6a88c49050604e079bafee9df018880/kiwisolver-1.4.4-cp39-cp39-manylinux_2_12_x86_64.manylinux2010_x86_64.whl
+MarkupSafe==1.1.1
+matplotlib @ file:///home/bibekg/.cache/pypoetry/artifacts/db/44/31/d24934397a876e6eceee48b54a1bc363eba5032592c36f915f849c90c3/matplotlib-3.5.2-cp39-cp39-manylinux_2_5_x86_64.manylinux1_x86_64.whl
+numpy @ file:///home/bibekg/.cache/pypoetry/artifacts/b3/f2/29/8eb1a0e5b6e16b36048ef4c7147ae34598deb3ec19c4e8cb5f8512aeee/numpy-1.22.4-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+packaging @ file:///home/bibekg/.cache/pypoetry/artifacts/47/3f/ce/b240169f7d8bef1ff24a0269b709721ce86543c2ec25e0b6adb2c2d7ac/packaging-21.3-py3-none-any.whl
+pandas @ file:///home/bibekg/.cache/pypoetry/artifacts/75/6c/8f/af4ae50a0c34916299eb40913054966b4eba8d6411f576a97016aba6bf/pandas-1.4.3-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+Pillow @ file:///home/bibekg/.cache/pypoetry/artifacts/72/04/c4/2e82474efef653fddcd25825a986214772da28a670e1786d93146c0403/Pillow-9.2.0-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+pyparsing @ file:///home/bibekg/.cache/pypoetry/artifacts/c9/49/7b/434b2668226040d1097efcdddb802b28d05b02854b659ac17913a9a90c/pyparsing-3.0.9-py3-none-any.whl
+python-dateutil @ file:///home/bibekg/.cache/pypoetry/artifacts/53/f8/2a/7d63ce15df7386e9536e83413453f8aa845b47fb425f05c4ca2fb231c3/python_dateutil-2.8.2-py2.py3-none-any.whl
+pytz @ file:///home/bibekg/.cache/pypoetry/artifacts/fb/60/46/e704d81037c87ab74c6677ae79ab43dda85c31e3ae38f53c44486b593a/pytz-2022.1-py2.py3-none-any.whl
+requests @ file:///home/bibekg/.cache/pypoetry/artifacts/9d/c3/47/826540cf4d7c5ba9d02a7af22c8f2d1afcfdce0b5cb40f5f5740f79e12/requests-2.28.0-py3-none-any.whl
+scikit-learn @ file:///home/bibekg/.cache/pypoetry/artifacts/8d/ff/91/a96f820bc58bcb9bfdf25b2f5e55bdbfb70a9c4776a50141966d6ec86f/scikit_learn-1.1.2-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+scipy @ file:///home/bibekg/.cache/pypoetry/artifacts/cf/54/79/6934fe0ee0382e865908197894c6ef46b1339d7fbe28cb76be7eba060c/scipy-1.6.1-cp39-cp39-manylinux1_x86_64.whl
+seaborn @ file:///home/bibekg/.cache/pypoetry/artifacts/3d/4d/cd/8b2aea4ee2e7dd3872fc7edc0029fcd78ee99cc84301e71f38d1404d1f/seaborn-0.12.0-py3-none-any.whl
+setuptools-scm @ file:///home/bibekg/.cache/pypoetry/artifacts/9f/b5/ae/0a45caf3783141b0dbffb07c788afe01d2909f7b531d9afec2fc61315b/setuptools_scm-7.0.5-py3-none-any.whl
+six @ file:///home/bibekg/.cache/pypoetry/artifacts/08/9f/47/c16ae03035fc69eaf100ea39657a49baaeef714e25a52575710c34cd48/six-1.16.0-py2.py3-none-any.whl
+soupsieve @ file:///home/bibekg/.cache/pypoetry/artifacts/b7/15/27/3ba8eed3fabe07703423999fa8c50ba16ab30344fb2670163cb6510481/soupsieve-2.3.2.post1-py3-none-any.whl
+sqlparse @ file:///home/bibekg/.cache/pypoetry/artifacts/ea/fd/ba/117a876397913faee210ef8bac93829e22ad9232662e656971383c0718/sqlparse-0.4.2-py3-none-any.whl
+threadpoolctl @ file:///home/bibekg/.cache/pypoetry/artifacts/a1/99/8f/521268b618d08b18c198e13411a00fa56ff22bc2129adfbec84c73bc21/threadpoolctl-3.1.0-py3-none-any.whl
+tomli @ file:///home/bibekg/.cache/pypoetry/artifacts/73/7c/d9/9f2752fc5b05f9176c6f3adc6484be1cec75a68925b8c5fe39d6493a07/tomli-2.0.1-py3-none-any.whl
+typing_extensions @ file:///home/bibekg/.cache/pypoetry/artifacts/c7/a2/3c/b8e5224a09b65b04693c613a52a41d6161affcaca091fbb647520b186c/typing_extensions-4.3.0-py3-none-any.whl
+urllib3 @ file:///home/bibekg/.cache/pypoetry/artifacts/86/4a/ad/37e91024d94f8218fc54b1fbb58b71888f53c1636daeb28593fa254ed2/urllib3-1.26.9-py2.py3-none-any.whl
+Werkzeug==1.0.1

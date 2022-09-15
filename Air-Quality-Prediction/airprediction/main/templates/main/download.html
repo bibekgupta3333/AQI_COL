@@ -1,0 +1,23 @@
+{% extends "main/base.html" %}
+
+
+{% load static %}
+
+{% block title %}login{% endblock %}
+
+
+{% block content %}
+
+<div class="container h-100 py-5">
+  <div class="row h-100 justify-content-center align-items-center py-5">
+		<a href="javascript:{document.getElementById('download').submit()}" onclick="" class=" btn btn-primary" >Dowload</a>
+
+			<form id="download" method="POST"  action="{% url 'main:download' %}">
+				{% csrf_token %}
+				<input type="hidden" />
+			
+			</form>
+   </div>
+  </div>
+
+{% endblock %}

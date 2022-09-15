@@ -1,0 +1,82 @@
+
+{% extends "main/base.html" %}
+
+
+{% load static %}
+
+{% block title %}about{% endblock %}
+
+
+{% block content %}
+	
+<hr class="featurette-divider border-0">
+	
+<div class="container h-100" align="center" >
+<div class="card  border-0" style="max-width: 900px;">
+  <div class="row no-gutters">
+    <div class="col-md-3 border-right">
+      <img src="{% static 'main/img/a11.jpg' %}" class="card-img" alt=" ">
+    </div>
+    <div class="col-md-8 text-dark bg-light">
+      <div class="card-body">
+        <h5 class="card-title">Kathmandu AirQuality</h5>
+        <p class="card-text text-justify " align="center">AQI sands for air qualiy index.Air quality index (AQI) is used by government agencies to communicate to the public how polluted the air currently is or how polluted it is forecast to become.Public health risks increase as the AQI rises.</p><p class="card-text text-justify" align="center">In the summer, Kathmandu’s PM2.5 falls to very close to the WHO annual limit. But in the winter, it shoots up to as high as 9 times that amount. And remember, that’s the average each month. Certain days will be much higher than that.It happens because summer weather patterns push more pollution away and because winter brings winter heating.
+
+ </p>
+        
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+ 	
+<hr class="featurette-divider border-0">
+	<div class="card-deck">
+	  <div class="card border-0">
+	    <img class="card-img-top" src="{% static 'main/img/a4.png' %}" alt="Card image cap">
+	    <div class="card-body border-top border-right text-dark bg-light">
+	      <h5 class="card-title ">AQI  <a  class="btn btn-default good">Good</a></h5>
+	      <p class="card-text "><b>(0-50)</b> Air quality is satisfactory, and air pollution poses little or no risk.</p>
+	    </div>
+	    
+	  </div>
+	  <div class="card border-0">
+	    <img class="card-img-top" src="{% static 'main/img/avatar_8-256.png'%}" alt="Card image cap">
+	    <div class="card-body border-top  border-right text-dark bg-light">
+	      <h5 class="card-title">AQI <a  class="btn btn-default moderate">Moderate</a></h5>
+	      <p class="card-text "><b>(51-100)</b> Air quality is acceptable. However, there may be a risk for some people,particularly those who are unusually sensitive to air pollution.
+		</p>
+	    </div>
+	    
+	  </div>
+	  <div class="card border-0 ">
+	    <img class="card-img-top" src="{% static 'main/img/a5.png'%}" alt="Card image cap">
+	    <div class="card-body border-top  border-right text-dark bg-light">
+	      <h5 class="card-title">AQI <a  class="btn btn-default Unhealthy_for_Sensitive_Groups">USG</a></h5>
+	      <p class="card-text "><b>(101-150) </b>Members of sensitive groups may experience health effects. The general public is less likely to be affected.</p>
+	    </div>
+	    
+	  </div>
+
+	  <div class="card border-0 ">
+	    <img class="card-img-top" src="{% static 'main/img/1.1.png'%}" alt="Card image cap">
+	    <div class="card-body border-top  border-right bg-light text-dark">
+	      <h5 class="card-title">AQI <a  class="btn btn-default Unhealthy">Unhealthy</a></h5>
+	      <p class="card-text align-center  "><b>(151-200)</b> Some members of the general public may experience health effects; members of sensitive groups may experience more serious health effects.
+			</p>
+	    </div>
+	    
+	  </div>
+	  <div class="card border-0 ">
+	    <img class="card-img-top" src="{% static 'main/img/a6.jpg'%}" alt="Card image cap">
+	    <div class="card-body border-top  border-right text-dark bg-light">
+	      <h5 class="card-title">AQI <a  class="btn btn-default Very_Unhealthy"><b>Hazardous</b></a></h5>
+	      <p class="card-text align-center"><b>(201-higher)</b>Health alert: The risk of health effects is increased for everyone.Health warning of emergency conditions: everyone is more likely to be affected.</p>
+	    </div>
+	    
+	  </div>
+	</div>
+
+{% endblock %}
+
+

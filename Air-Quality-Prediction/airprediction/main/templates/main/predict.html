@@ -1,0 +1,42 @@
+
+{% extends "main/base.html" %}
+
+
+{% load static %}
+
+{% block title %}about{% endblock %}
+
+
+{% block content %}
+
+<h1 align="center">Kathmandu AQI Prediction</h1>
+<br>
+
+<div class="container h-100">
+  <div class="row h-100 justify-content-center align-items-center">
+    <form action="{% url 'main:predict-aqi' %}" method="POST" enctype="multipart/form-data" class="form-inline my-2 my-lg-0">
+    {% csrf_token %}
+
+    <input class="form-control mr-sm-2" type="date" name="date" min="2020-09-01" max="2020-09-30">
+    <input class="btn btn-primary" type="submit" value="Predict"><br><br>
+</form>
+</div>
+</div>
+
+{% if actual %}
+<div class="card">
+     <div class="card-body">
+
+                            <h5 class="card-title"> AQI : {{actual}} </h5>
+                            <a  class="btn btn-default {{color}} ">{{name}}</a>
+                            <p>{{descp}}</p>
+
+
+                            <img src="{% static 'main/img/1.1.png'%}" align="right">
+         
+              </div>
+          </div>
+
+{% endif %}
+
+{% endblock %}

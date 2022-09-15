@@ -1,0 +1,156 @@
+anyio==2.2.0
+appdirs==1.4.4
+argon2-cffi==20.1.0
+asgiref @ file:///home/bibekg/.cache/pypoetry/artifacts/cf/65/18/1451154a3ac6f8e749a6f7485ce77472fc1b339d4696f7a4cb816ac781/asgiref-3.5.2-py3-none-any.whl
+async-generator==1.10
+attrs==20.3.0
+autopep8==1.5.4
+aws-sam-translator==1.50.0
+Babel==2.9.1
+backcall==0.2.0
+bcrypt==3.2.0
+beautifulsoup4 @ file:///home/bibekg/.cache/pypoetry/artifacts/5a/51/f6/ced036f2b2ef6b792e8138e7bd9584e5eac63a3d4481b6e62402d050c7/beautifulsoup4-4.11.1-py3-none-any.whl
+black==20.8b1
+bleach==3.3.0
+boto3==1.24.54
+botocore==1.27.54
+CacheControl==0.12.6
+cached-property==1.5.2
+cachy==0.3.0
+certifi @ file:///home/bibekg/.cache/pypoetry/artifacts/b0/0d/df/4aa04d9b421fc5f1438b55d4b37516d21ef0ba40158bf7f9dfb28122ca/certifi-2022.6.15-py3-none-any.whl
+cffi==1.14.4
+cfn-lint==0.61.5
+chardet==3.0.4
+charset-normalizer @ file:///home/bibekg/.cache/pypoetry/artifacts/2b/25/ee/fa64b49cb44c9c392acf26e69ee8314d3b386932de86a9945f4ad2e633/charset_normalizer-2.0.12-py3-none-any.whl
+cleo==0.8.1
+click==8.1.3
+clikit==0.6.2
+crashtest==0.3.1
+cryptography==3.3.1
+cycler==0.11.0
+decorator==5.0.7
+defusedxml==0.7.1
+deprecation==2.1.0
+distlib==0.3.1
+distro==1.5.0
+Django @ file:///home/bibekg/.cache/pypoetry/artifacts/a6/d5/44/a73a4b49c4cbffbdd99a218d4139258260dc4ee675f9541492b8eea759/Django-4.0.5-py3-none-any.whl
+django-cors-headers==3.6.0
+djangorestframework==3.12.2
+docker==4.4.0
+docker-compose==1.27.4
+dockerpty==0.4.1
+docopt==0.6.2
+entrypoints==0.3
+filelock==3.0.12
+fonttools==4.34.4
+html5lib==1.1
+idna @ file:///home/bibekg/.cache/pypoetry/artifacts/d5/04/80/9c17fd3240a37d12ff2ef042b0306aeb1abd2d8b95f150fd60be938352/idna-3.3-py3-none-any.whl
+ipykernel==5.5.3
+ipython==7.23.0
+ipython-genutils==0.2.0
+ipython-memory-usage==1.7
+itsdangerous==1.1.0
+jedi==0.18.0
+jeepney==0.6.0
+Jinja2==2.11.2
+jmespath==1.0.1
+joblib==1.1.0
+jschema-to-python==1.2.3
+json5==0.9.5
+jsonpatch==1.32
+jsonpickle==2.2.0
+jsonpointer==2.3
+jsonschema==3.2.0
+junit-xml==1.9
+jupyter-client==6.1.12
+jupyter-core==4.7.1
+jupyter-packaging==0.9.2
+jupyter-server==1.6.4
+jupyterlab==3.0.14
+jupyterlab-pygments==0.1.2
+jupyterlab-server==2.5.0
+keyring==21.5.0
+kiwisolver==1.4.4
+lockfile==0.12.2
+lxml==4.9.1
+MarkupSafe==1.1.1
+matplotlib==3.5.2
+matplotlib-inline==0.1.2
+memory-profiler==0.58.0
+mistune==0.8.4
+msgpack==1.0.1
+mypy-extensions==0.4.3
+nbclassic==0.2.7
+nbclient==0.5.3
+nbconvert==6.0.7
+nbformat==5.1.3
+nest-asyncio==1.5.1
+networkx==2.8.5
+notebook==6.3.0
+numpy @ file:///home/bibekg/.cache/pypoetry/artifacts/b3/f2/29/8eb1a0e5b6e16b36048ef4c7147ae34598deb3ec19c4e8cb5f8512aeee/numpy-1.22.4-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+packaging @ file:///home/bibekg/.cache/pypoetry/artifacts/47/3f/ce/b240169f7d8bef1ff24a0269b709721ce86543c2ec25e0b6adb2c2d7ac/packaging-21.3-py3-none-any.whl
+pandas==1.4.3
+pandocfilters==1.4.3
+paramiko==2.7.2
+parso==0.8.2
+pastel==0.2.1
+pathspec==0.8.1
+pbr==5.10.0
+pexpect==4.8.0
+pickleshare==0.7.5
+Pillow @ file:///home/bibekg/.cache/pypoetry/artifacts/72/04/c4/2e82474efef653fddcd25825a986214772da28a670e1786d93146c0403/Pillow-9.2.0-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+pkginfo==1.6.1
+poetry==1.1.4
+poetry-core==1.0.0
+prometheus-client==0.10.1
+prompt-toolkit==3.0.18
+psutil==5.8.0
+ptyprocess==0.6.0
+pycodestyle==2.6.0
+pycparser==2.20
+pydotplus==2.0.2
+Pygments==2.9.0
+pylev==1.3.0
+PyNaCl==1.4.0
+pyparsing @ file:///home/bibekg/.cache/pypoetry/artifacts/c9/49/7b/434b2668226040d1097efcdddb802b28d05b02854b659ac17913a9a90c/pyparsing-3.0.9-py3-none-any.whl
+pyrsistent==0.17.3
+pyshopee==1.3.9
+python-dateutil @ file:///home/bibekg/.cache/pypoetry/artifacts/53/f8/2a/7d63ce15df7386e9536e83413453f8aa845b47fb425f05c4ca2fb231c3/python_dateutil-2.8.2-py2.py3-none-any.whl
+python-dotenv==0.15.0
+pytz @ file:///home/bibekg/.cache/pypoetry/artifacts/fb/60/46/e704d81037c87ab74c6677ae79ab43dda85c31e3ae38f53c44486b593a/pytz-2022.1-py2.py3-none-any.whl
+PyYAML==6.0
+pyzmq==22.0.3
+regex==2021.3.17
+requests @ file:///home/bibekg/.cache/pypoetry/artifacts/9d/c3/47/826540cf4d7c5ba9d02a7af22c8f2d1afcfdce0b5cb40f5f5740f79e12/requests-2.28.0-py3-none-any.whl
+requests-toolbelt==0.9.1
+s3transfer==0.6.0
+sarif-om==1.0.4
+scikit-learn==1.1.2
+scipy @ file:///home/bibekg/.cache/pypoetry/artifacts/cf/54/79/6934fe0ee0382e865908197894c6ef46b1339d7fbe28cb76be7eba060c/scipy-1.6.1-cp39-cp39-manylinux1_x86_64.whl
+seaborn==0.12.0
+SecretStorage==3.3.0
+Send2Trash==1.5.0
+setuptools-scm @ file:///home/bibekg/.cache/pypoetry/artifacts/9f/b5/ae/0a45caf3783141b0dbffb07c788afe01d2909f7b531d9afec2fc61315b/setuptools_scm-7.0.5-py3-none-any.whl
+shellingham==1.3.2
+six @ file:///home/bibekg/.cache/pypoetry/artifacts/08/9f/47/c16ae03035fc69eaf100ea39657a49baaeef714e25a52575710c34cd48/six-1.16.0-py2.py3-none-any.whl
+sniffio==1.2.0
+soupsieve==2.3.2.post1
+sqlparse @ file:///home/bibekg/.cache/pypoetry/artifacts/ea/fd/ba/117a876397913faee210ef8bac93829e22ad9232662e656971383c0718/sqlparse-0.4.2-py3-none-any.whl
+terminado==0.9.4
+testpath==0.4.4
+texttable==1.6.3
+threadpoolctl==3.1.0
+toml==0.10.2
+tomli @ file:///home/bibekg/.cache/pypoetry/artifacts/73/7c/d9/9f2752fc5b05f9176c6f3adc6484be1cec75a68925b8c5fe39d6493a07/tomli-2.0.1-py3-none-any.whl
+tomlkit==0.7.0
+tornado==6.1
+traitlets==5.0.5
+typed-ast==1.4.2
+typing_extensions @ file:///home/bibekg/.cache/pypoetry/artifacts/c7/a2/3c/b8e5224a09b65b04693c613a52a41d6161affcaca091fbb647520b186c/typing_extensions-4.3.0-py3-none-any.whl
+urllib3 @ file:///home/bibekg/.cache/pypoetry/artifacts/86/4a/ad/37e91024d94f8218fc54b1fbb58b71888f53c1636daeb28593fa254ed2/urllib3-1.26.9-py2.py3-none-any.whl
+virtualenv==20.2.2
+wcwidth==0.2.5
+webencodings==0.5.1
+websocket-client==0.57.0
+Werkzeug==1.0.1
+xgboost==1.6.2
