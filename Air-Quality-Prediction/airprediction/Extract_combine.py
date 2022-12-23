@@ -87,12 +87,12 @@ if __name__ == "__main__":
                     print(row)
                 wr.writerow(row)
 
-    data_2013 = data_combine(2018, 600)
-    data_2014 = data_combine(2019, 600)
-    data_2015 = data_combine(2020, 600)
-    data_2016 = data_combine(2021, 600)
+    data_2018 = data_combine(2018, 600)
+    data_2019 = data_combine(2019, 600)
+    data_2020 = data_combine(2020, 600)
+    data_2021 = data_combine(2021, 600)
 
-    total = data_2013 + data_2014 + data_2015 + data_2016
+    total = data_2018 + data_2019 + data_2020 + data_2021
 
     with open("Data/Real-Data/Real_Combine.csv", "w") as csvfile:
         wr = csv.writer(csvfile, dialect="excel")

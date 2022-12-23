@@ -84,8 +84,9 @@ def homepage(request):
         api_url, headers={"X-Api-Key": "XxyWnaye9xjgonImv4QiHA==BPxPDdb1hJx1DlAk"}
     )
     ninjaApiO3=0
+    print("response",response.json(),"responseEnd",response.status_code)
     if response.status_code == requests.codes.ok:
-        print(response.text)
+        print("response",response.json(),"responseEnd",response.status_code)
         api = json.loads(response.text)
         {"CO": {"concentration": 694.28, "aqi": 7}, "NO2": {"concentration": 15.25, "aqi": 19}, "O3": {"concentration": 18.6, "aqi": 15}, "SO2": {"concentration": 6.26, "aqi": 9}, "PM2.5": {"concentration": 21.84, "aqi": 62}, "PM10": {"concentration": 30.46, "aqi": 28}, "overall_aqi": 62}
         ninjaApiO3=api["O3"]["aqi"]
@@ -99,32 +100,7 @@ def homepage(request):
         print(api)
     except Exception as e:
         api = "error...."
-        # api = [
-        #     {
-        #         "DateObserved": datetime.datetime.date(datetime.datetime.now()),
-        #         "HourObserved": 14,
-        #         "LocalTimeZone": "NPT",
-        #         "ReportingArea": "Phora Durbar Kathmandu",
-        #         "StateCode": "  ",
-        #         "Latitude": 27.7125,
-        #         "Longitude": 85.3157,
-        #         "ParameterName": "PM2.5",
-        #         "AQI": random.randint(60, 100),
-        #         "Category": {"Number": 2, "Name": "Moderate"},
-        #     },
-        #     {
-        #         "DateObserved": datetime.datetime.date(datetime.datetime.now()),
-        #         "HourObserved": 14,
-        #         "LocalTimeZone": "NPT",
-        #         "ReportingArea": "Phora Durbar Kathmandu",
-        #         "StateCode": "  ",
-        #         "Latitude": 27.7125,
-        #         "Longitude": 85.3157,
-        #         "ParameterName": "PM2.5",
-        #         "AQI": random.randint(60, 100),
-        #         "Category": {"Number": 2, "Name": "Moderate"},
-        #     },
-        # ]
+
 
     if api[0]["Category"]["Name"] == "Good":
         Category_Description = "(0-50) Air quality is satisfactory, and air pollution poses little or no risk."
@@ -144,15 +120,18 @@ def homepage(request):
     elif api[0]["Category"]["Name"] == "Hazardous":
         Category_Description = "(301 and higher) Health warning of emergency conditions: everyone is more likely to be affected."
         Category_color = "Hazardous"
-    
+    print("NinjaAPI",ninjaApiO3)
     if ninjaApiO3 <= 50:
         Category_Description1 = "(0-50) Air quality is satisfactory, and air pollution poses little or no risk."
         Category_color1 = "good"
     elif ninjaApiO3 > 50  and ninjaApiO3 <= 100:
         Category_Description1 = "(51-100) Air quality is acceptable. However, there may be a risk for some people,particularly those who are unusually sensitive to air pollution."
         Category_color1 = "moderate"
-    elif ninjaApiO3 > 100  and ninjaApiO3 <= 150:
+    elif ninjaApiO3 > 100  and ninjaApiO3 <= 200:
         Category_Description1 = "(101-150) Members of sensitive groups may experience health effects. The general public is less likely to be affected."
+        Category_color1 = "Unhealthy_for_Sensitive_Groups"
+    elif ninjaApiO3 > 200:
+        Category_Description1 = "(200- 500) Members of sensitive groups may experience health effects. The general public is less likely to be affected."
         Category_color1 = "Unhealthy_for_Sensitive_Groups"
 
     return render(
@@ -203,7 +182,6 @@ def past_data(request):
 
 def predict(request):
     return render(request, "main/predict.html")
-
 
 
 def predictaqinew(request):

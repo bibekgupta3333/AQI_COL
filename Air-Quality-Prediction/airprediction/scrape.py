@@ -20,7 +20,8 @@ def retrive_html():
 
             texts = requests.get(url)
             text_utf = texts.text.encode("utf=8")
-
+        for i in range(15):
+    
             if not os.path.exists("Data/Html_Data/{}".format(year)):
                 os.makedirs("Data/Html_Data/{}".format(year))
             with open("Data/Html_Data/{}/{}.html".format(year, month), "wb") as output:
