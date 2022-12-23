@@ -202,17 +202,28 @@ def predictaqinew(request):
             print(data)
             prediction = model.predict([np.array(list(data.values()))])
             output = prediction[0]
-            print(output)
+            print(output,output>=100)
             actual = output
             if actual <= 50:
                 color = "good"
                 descp = "(0-50) Air quality is satisfactory, and air pollution poses little or no risk."
                 name = "Good AQI"
-
-            elif actual >= 50:
+            if actual >= 50:
                 color = "moderate"
                 descp = "(51-100) Air quality is acceptable. However, there may be a risk for some people,particularly those who are unusually sensitive to air pollution."
                 name = "Moderate AQI"
+            if actual >= 100:
+                color = "usg"
+                descp = "(101-150) Members of sensitive groups may experience health effects. The general public is less likely to be affected."
+                name = "USG AQI"
+            if actual >= 150:
+                color = "unhealty"
+                descp = "(151-200) Some members of the general public may experience health effects; members of sensitive groups may experience more serious health effects."
+                name = "Unhealty AQI"
+            if actual > 200:
+                color = "hazardous"
+                descp = "(201-higher)Health alert: The risk of health effects is increased for everyone.Health warning of emergency conditions: everyone is more likely to be affected."
+                name = "Hazardous AQI"
 
             context = {
                 "prediction_text":output,
@@ -221,6 +232,7 @@ def predictaqinew(request):
                 "descp": descp,
                 "name": name,
             }
+            print(context)
             return render(request, "main/predictnew.html", context)
 
     return render(request, "main/predictnew.html", {})
