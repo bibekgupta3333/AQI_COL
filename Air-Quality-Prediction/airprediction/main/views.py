@@ -8,6 +8,7 @@ from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from .models import Dataset, Dataset1, Dataset2, Dataset3
 
+
 def load_data():
     csv_reader = csv.reader(
         open(
@@ -77,57 +78,64 @@ def homepage(request):
     api_request = requests.get(
         "http://www.airnowapi.org/aq/observation/latLong/current/?format=application/json&latitude=27.700769&longitude=85.300140&distance=25&API_KEY=7AC96E40-0D38-49D2-A5FF-0240E15F336E"
     )
-
+    print("api_request", api_request.content)
     city = "kathmandu"
     api_url = "https://api.api-ninjas.com/v1/airquality?city={}".format(city)
     response = requests.get(
         api_url, headers={"X-Api-Key": "XxyWnaye9xjgonImv4QiHA==BPxPDdb1hJx1DlAk"}
     )
-    ninjaApiO3=0
-    print("response",response.json(),"responseEnd",response.status_code)
+    ninjaApiO3 = 0
+    print("response", response.json(), "responseEnd", response.status_code)
     if response.status_code == requests.codes.ok:
-        print("response",response.json(),"responseEnd",response.status_code)
+        print("response", response.json(), "responseEnd", response.status_code)
         api = json.loads(response.text)
-        {"CO": {"concentration": 694.28, "aqi": 7}, "NO2": {"concentration": 15.25, "aqi": 19}, "O3": {"concentration": 18.6, "aqi": 15}, "SO2": {"concentration": 6.26, "aqi": 9}, "PM2.5": {"concentration": 21.84, "aqi": 62}, "PM10": {"concentration": 30.46, "aqi": 28}, "overall_aqi": 62}
-        ninjaApiO3=api["O3"]["aqi"]
-
+        {
+            "CO": {"concentration": 694.28, "aqi": 7},
+            "NO2": {"concentration": 15.25, "aqi": 19},
+            "O3": {"concentration": 18.6, "aqi": 15},
+            "SO2": {"concentration": 6.26, "aqi": 9},
+            "PM2.5": {"concentration": 21.84, "aqi": 62},
+            "PM10": {"concentration": 30.46, "aqi": 28},
+            "overall_aqi": 62,
+        }
+        ninjaApiO3 = api["O3"]["aqi"]
+        print("ninjaApiO3", ninjaApiO3)
         print(api["O3"])
     else:
         print("Error:", response.status_code, response.text)
     try:
         # api = json.loads(api_request.content)
         api = json.loads(api_request.content)
-        print(api)
+        print("api", api)
     except Exception as e:
         api = "error...."
 
-
-    if api[0]["Category"]["Name"] == "Good":
-        Category_Description = "(0-50) Air quality is satisfactory, and air pollution poses little or no risk."
-        Category_color = "good"
-    elif api[0]["Category"]["Name"] == "Moderate":
-        Category_Description = "(51-100) Air quality is acceptable. However, there may be a risk for some people,particularly those who are unusually sensitive to air pollution."
-        Category_color = "moderate"
-    elif api[0]["Category"]["Name"] == "Unhealthy for Sensitive Groups":
-        Category_Description = "(101-150) Members of sensitive groups may experience health effects. The general public is less likely to be affected."
-        Category_color = "Unhealthy_for_Sensitive_Groups"
-    elif api[0]["Category"]["Name"] == "Unhealthy":
-        Category_Description = "(151-200) Some members of the general public may experience health effects; members of sensitive groups may experience more serious health effects."
-        Category_color = "Unhealthy"
-    elif api[0]["Category"]["Name"] == "Very Unhealthy":
-        Category_Description = "(201-300) Health alert: The risk of health effects is increased for everyone."
-        Category_color = "Very_Unhealthy"
-    elif api[0]["Category"]["Name"] == "Hazardous":
-        Category_Description = "(301 and higher) Health warning of emergency conditions: everyone is more likely to be affected."
-        Category_color = "Hazardous"
-    print("NinjaAPI",ninjaApiO3)
+    # if api[0]["Category"]["Name"] == "Good":
+    #     Category_Description = "(0-50) Air quality is satisfactory, and air pollution poses little or no risk."
+    #     Category_color = "good"
+    # elif api[0]["Category"]["Name"] == "Moderate":
+    #     Category_Description = "(51-100) Air quality is acceptable. However, there may be a risk for some people,particularly those who are unusually sensitive to air pollution."
+    #     Category_color = "moderate"
+    # elif api[0]["Category"]["Name"] == "Unhealthy for Sensitive Groups":
+    #     Category_Description = "(101-150) Members of sensitive groups may experience health effects. The general public is less likely to be affected."
+    #     Category_color = "Unhealthy_for_Sensitive_Groups"
+    # elif api[0]["Category"]["Name"] == "Unhealthy":
+    #     Category_Description = "(151-200) Some members of the general public may experience health effects; members of sensitive groups may experience more serious health effects."
+    #     Category_color = "Unhealthy"
+    # elif api[0]["Category"]["Name"] == "Very Unhealthy":
+    #     Category_Description = "(201-300) Health alert: The risk of health effects is increased for everyone."
+    #     Category_color = "Very_Unhealthy"
+    # elif api[0]["Category"]["Name"] == "Hazardous":
+    #     Category_Description = "(301 and higher) Health warning of emergency conditions: everyone is more likely to be affected."
+    #     Category_color = "Hazardous"
+    print("NinjaAPI", ninjaApiO3)
     if ninjaApiO3 <= 50:
         Category_Description1 = "(0-50) Air quality is satisfactory, and air pollution poses little or no risk."
         Category_color1 = "good"
-    elif ninjaApiO3 > 50  and ninjaApiO3 <= 100:
+    elif ninjaApiO3 > 50 and ninjaApiO3 <= 100:
         Category_Description1 = "(51-100) Air quality is acceptable. However, there may be a risk for some people,particularly those who are unusually sensitive to air pollution."
         Category_color1 = "moderate"
-    elif ninjaApiO3 > 100  and ninjaApiO3 <= 200:
+    elif ninjaApiO3 > 100 and ninjaApiO3 <= 200:
         Category_Description1 = "(101-150) Members of sensitive groups may experience health effects. The general public is less likely to be affected."
         Category_color1 = "Unhealthy_for_Sensitive_Groups"
     elif ninjaApiO3 > 200:
@@ -140,8 +148,8 @@ def homepage(request):
         {
             "api": api,
             "ozone3": ninjaApiO3,
-            "Category_Description": Category_Description,
-            "Category_color": Category_color,
+            "Category_Description": Category_Description1,
+            "Category_color": Category_color1,
             "Category_Description1": Category_Description1,
             "Category_color1": Category_color1,
         },
@@ -190,19 +198,29 @@ def predictaqinew(request):
     import pickle
     import numpy as np
     import os
-    model_path = os.path.dirname(os.path.abspath(__file__)) +'/model.pkl'
-    print(model_path)
-    with open(model_path, 'rb') as f:
+
+    model_path = "/Users/bibekg/Documents/Learning/blockchain/AQI_COL/Air-Quality-Prediction/airprediction/Machine Learning Models/regression_linear.pkl"
+    print("model_path", model_path)
+    with open(model_path, "rb") as f:
         model = pickle.load(f)
         print(request)
         if request.method == "POST":
             print(request.POST)
-            data={'T': float(request.POST.get('T')), 'TM': float(request.POST.get('TM')), 'Tm': float(request.POST.get('Tm')), 'SLP': float(request.POST.get('SLP')), 'H':  float(request.POST.get('H')), 'VV':  float(request.POST.get('VV')), 'V': float(request.POST.get('V')), 'VM':  float(request.POST.get('VM'))}
+            data = {
+                "T": float(request.POST.get("T")),
+                "TM": float(request.POST.get("TM")),
+                "Tm": float(request.POST.get("Tm")),
+                "SLP": float(request.POST.get("SLP")),
+                "H": float(request.POST.get("H")),
+                "VV": float(request.POST.get("VV")),
+                "V": float(request.POST.get("V")),
+                "VM": float(request.POST.get("VM")),
+            }
             print([np.array(list(data.values()))])
             print(data)
             prediction = model.predict([np.array(list(data.values()))])
             output = prediction[0]
-            print(output,output>=100)
+            print(output, output >= 100)
             actual = output
             if actual <= 50:
                 color = "good"
@@ -226,7 +244,7 @@ def predictaqinew(request):
                 name = "Hazardous AQI"
 
             context = {
-                "prediction_text":output,
+                "prediction_text": output,
                 "actual": actual,
                 "color": color,
                 "descp": descp,
