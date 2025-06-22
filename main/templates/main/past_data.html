@@ -1,54 +1,57 @@
 {% extends "main/base.html" %}
 
-
 {% load static %}
 
-{% block title %}past-data{% endblock %}
-
+{% block title %}Historical Data - Air Quality Prediction{% endblock %}
 
 {% block content %}
- 
- <script type="text/javascript" src="https://cdn.bokeh.org/bokeh/release/bokeh-2.0.2.min.js" integrity="sha384-ufR9RFnRs6lniiaFvtJziE0YeidtAgBRH6ux2oUItHw5WTvE1zuk9uzhUU/FJXDp" crossorigin="anonymous"></script>
-        <script type="text/javascript">
-            Bokeh.set_log_level("info");
-        </script>
-  <script type="text/javascript" src="https://cdn.bokeh.org/bokeh/release/bokeh-2.0.2.min.js" integrity="sha384-ufR9RFnRs6lniiaFvtJziE0YeidtAgBRH6ux2oUItHw5WTvE1zuk9uzhUU/FJXDp" crossorigin="anonymous"></script>
-        <script type="text/javascript">
-            Bokeh.set_log_level("info");
-        </script>
-   <script type="text/javascript" src="https://cdn.bokeh.org/bokeh/release/bokeh-2.0.2.min.js" integrity="sha384-ufR9RFnRs6lniiaFvtJziE0YeidtAgBRH6ux2oUItHw5WTvE1zuk9uzhUU/FJXDp" crossorigin="anonymous"></script>
-        <script type="text/javascript">
-            Bokeh.set_log_level("info");
-        </script>
-    <script type="text/javascript" src="https://cdn.bokeh.org/bokeh/release/bokeh-2.0.2.min.js" integrity="sha384-ufR9RFnRs6lniiaFvtJziE0YeidtAgBRH6ux2oUItHw5WTvE1zuk9uzhUU/FJXDp" crossorigin="anonymous"></script>
-        <script type="text/javascript">
-            Bokeh.set_log_level("info");
-        </script>
-        
+<script type="text/javascript" src="https://cdn.bokeh.org/bokeh/release/bokeh-2.0.2.min.js" integrity="sha384-ufR9RFnRs6lniiaFvtJziE0YeidtAgBRH6ux2oUItHw5WTvE1zuk9uzhUU/FJXDp" crossorigin="anonymous"></script>
+<script type="text/javascript">
+    Bokeh.set_log_level("info");
+</script>
+
+<div class="modern-container">
+  <div class="container">
+    <!-- Page Header -->
+    <div class="modern-card">
+      <div class="modern-card-header">
+        <h1><i class="fas fa-chart-line me-2"></i>Historical Air Quality Data</h1>
+        <p>Explore air quality trends and patterns from previous years</p>
+      </div>
       
-        
- <hr class="featurette-divider">
-<div class="container h-100">
-  <div class="row h-100 justify-content-center align-items-center">
-    <form action="{% url 'main:past-data' %}" method="POST" enctype="multipart/form-data" class="form-inline my-2 my-lg-0">
-    {% csrf_token %}
+      <!-- Year Selection -->
+      <div class="text-center">
+        <h5 class="mb-4"><i class="fas fa-calendar-alt me-2"></i>Select Year to View Data</h5>
+        <form action="{% url 'main:past-data' %}" method="POST" enctype="multipart/form-data">
+          {% csrf_token %}
+          <div class="btn-group btn-group-lg" role="group" aria-label="Year selection">
+            <button class="btn btn-modern" type="submit" name="first" value="2018">
+              <i class="fas fa-calendar me-2"></i>2018
+            </button>
+            <button class="btn btn-modern" type="submit" name="second" value="2019">
+              <i class="fas fa-calendar me-2"></i>2019
+            </button>
+            <button class="btn btn-modern" type="submit" name="third" value="2020">
+              <i class="fas fa-calendar me-2"></i>2020
+            </button>
+            <button class="btn btn-modern" type="submit" name="fourth" value="2021">
+              <i class="fas fa-calendar me-2"></i>2021
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
 
-    <input class="btn btn-primary" type="submit" name="first" value="2018">&nbsp;
-    <input class="btn btn-primary" type="submit" name="second" value="2019">&nbsp;
-    <input class="btn btn-primary" type="submit" name="third" value="2020">&nbsp;
-    <input class="btn btn-primary" type="submit" name="fourth" value="2021">&nbsp;
-</form>
-</form>
-</div>
-</div><br>
-<hr class="featurette-divider">
-
-                  
 {% if data %}                 
-<div class="container-sm border">
-
-    <div align="center">
-             <div class="bk-root" id="4bf4c677-3266-4add-b5c3-e2cffdd394ea" data-root-id="1001"></div>
+    <!-- Chart and Data Display -->
+    <div class="modern-card">
+      <div class="modern-card-header">
+        <h2><i class="fas fa-chart-area me-2"></i>Air Quality Trends</h2>
+        <p>Interactive visualization of ozone and PM2.5 levels throughout the selected year</p>
+      </div>
+      
+      <div class="text-center">
+        <div class="bk-root" id="4bf4c677-3266-4add-b5c3-e2cffdd394ea" data-root-id="1001"></div>
             
           
         
@@ -96,38 +99,48 @@
       </div>
         <br><br>
 
-        <div align="center">
-                  <table class="table">
-                    <thead class="thead-dark">
-                      <tr>
-                        <th scope="col">S.N</th>
-                        <th scope="col">date</th>
-                        <th scope="col">Ozone</th>
-                        <th scope="col">Pm2.5</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {% for d in data %}
-                      <tr>
-                        <th scope="row">{{d.id}}</th>
-                        <td>{{d.date}}</td>
-                        <td>{{d.Ozone}}</td>
-                        <td>{{d.Pm25}}</td>
-                      </tr>
-                    {% endfor%}
-                    </tbody>
-                  </table>
-                  </div><br><br>
-</div>
+       </div>
+       
+       <!-- Data Table -->
+       <div class="mt-4">
+         <h4 class="mb-3"><i class="fas fa-table me-2"></i>Detailed Data Records</h4>
+         <div class="table-responsive">
+           <table class="table table-modern">
+             <thead>
+               <tr>
+                 <th scope="col"><i class="fas fa-hashtag me-2"></i>S.N</th>
+                 <th scope="col"><i class="fas fa-calendar me-2"></i>Date</th>
+                 <th scope="col"><i class="fas fa-atom me-2"></i>Ozone</th>
+                 <th scope="col"><i class="fas fa-microscope me-2"></i>PM2.5</th>
+               </tr>
+             </thead>
+             <tbody>
+               {% for d in data %}
+               <tr>
+                 <th scope="row">{{d.id}}</th>
+                 <td>{{d.date}}</td>
+                 <td><span class="badge badge-info">{{d.Ozone}}</span></td>
+                 <td><span class="badge badge-warning">{{d.Pm25}}</span></td>
+               </tr>
+               {% endfor %}
+             </tbody>
+           </table>
+         </div>
+       </div>
+     </div>
 {% endif %}
 
 
-{% if data1 %}
-
-	<div class="container-sm border">
-
-    <div align="center">
-               <div class="bk-root" id="42b85419-8463-40a0-8e0b-b2fcf6215343" data-root-id="1364"></div>
+    {% if data1 %}
+    <!-- Second Year Data Display -->
+    <div class="modern-card">
+      <div class="modern-card-header">
+        <h2><i class="fas fa-chart-area me-2"></i>Air Quality Trends</h2>
+        <p>Interactive visualization of ozone and PM2.5 levels throughout the selected year</p>
+      </div>
+      
+      <div class="text-center">
+        <div class="bk-root" id="42b85419-8463-40a0-8e0b-b2fcf6215343" data-root-id="1364"></div>
             
           
         
@@ -176,28 +189,35 @@
       </div>
         <br><br>
 
-        <div align="center">
-                  <table class="table">
-                    <thead class="thead-dark">
-                      <tr>
-                        <th scope="col">S.N</th>
-                        <th scope="col">date</th>
-                        <th scope="col">Ozone</th>
-                        <th scope="col">Pm2.5</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {% for d in data1 %}
-                      <tr>
-                        <th scope="row">{{d.id}}</th>
-                        <td>{{d.date}}</td>
-                        <td>{{d.Ozone}}</td>
-                        <td>{{d.Pm25}}</td>
-                      </tr>
-                    {% endfor%}
-                    </tbody>
-                  </table>
-                  </div><br><br>
+       </div>
+       
+       <!-- Data Table -->
+       <div class="mt-4">
+         <h4 class="mb-3"><i class="fas fa-table me-2"></i>Detailed Data Records</h4>
+         <div class="table-responsive">
+           <table class="table table-modern">
+             <thead>
+               <tr>
+                 <th scope="col"><i class="fas fa-hashtag me-2"></i>S.N</th>
+                 <th scope="col"><i class="fas fa-calendar me-2"></i>Date</th>
+                 <th scope="col"><i class="fas fa-atom me-2"></i>Ozone</th>
+                 <th scope="col"><i class="fas fa-microscope me-2"></i>PM2.5</th>
+               </tr>
+             </thead>
+             <tbody>
+               {% for d in data1 %}
+               <tr>
+                 <th scope="row">{{d.id}}</th>
+                 <td>{{d.date}}</td>
+                 <td><span class="badge badge-info">{{d.Ozone}}</span></td>
+                 <td><span class="badge badge-warning">{{d.Pm25}}</span></td>
+               </tr>
+               {% endfor %}
+             </tbody>
+           </table>
+         </div>
+       </div>
+     </div>
 </div>
 
 
@@ -256,29 +276,35 @@
     </div>
     <br><br>
 
-    <div align="center">
-                  <table class="table">
-                    <thead class="thead-dark">
-                      <tr>
-                        <th scope="col">S.N</th>
-                        <th scope="col">date</th>
-                        <th scope="col">Ozone</th>
-                        <th scope="col">Pm2.5</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {% for d in data2 %}
-                      <tr>
-                        <th scope="row">{{d.id}}</th>
-                        <td>{{d.date}}</td>
-                        <td>{{d.Ozone}}</td>
-                        <td>{{d.Pm25}}</td>
-                      </tr>
-                    {% endfor%}
-                    </tbody>
-                  </table>
-                  </div><br><br>
-</div>
+       </div>
+       
+       <!-- Data Table -->
+       <div class="mt-4">
+         <h4 class="mb-3"><i class="fas fa-table me-2"></i>Detailed Data Records</h4>
+         <div class="table-responsive">
+           <table class="table table-modern">
+             <thead>
+               <tr>
+                 <th scope="col"><i class="fas fa-hashtag me-2"></i>S.N</th>
+                 <th scope="col"><i class="fas fa-calendar me-2"></i>Date</th>
+                 <th scope="col"><i class="fas fa-atom me-2"></i>Ozone</th>
+                 <th scope="col"><i class="fas fa-microscope me-2"></i>PM2.5</th>
+               </tr>
+             </thead>
+             <tbody>
+               {% for d in data2 %}
+               <tr>
+                 <th scope="row">{{d.id}}</th>
+                 <td>{{d.date}}</td>
+                 <td><span class="badge badge-info">{{d.Ozone}}</span></td>
+                 <td><span class="badge badge-warning">{{d.Pm25}}</span></td>
+               </tr>
+               {% endfor %}
+             </tbody>
+           </table>
+         </div>
+       </div>
+     </div>
 
 
 
@@ -290,12 +316,16 @@
 
 
 
-{% if data3 %}
-<div class="container-sm border">
-
-    <div align="center">
-
-              <div class="bk-root" id="efb6cf3c-88f2-485e-970e-3820a45435b0" data-root-id="2090"></div>
+    {% if data3 %}
+    <!-- Third Year Data Display -->
+    <div class="modern-card">
+      <div class="modern-card-header">
+        <h2><i class="fas fa-chart-line me-2"></i>Comprehensive Air Quality Analysis</h2>
+        <p>Complete dataset visualization showing long-term trends and patterns</p>
+      </div>
+      
+      <div class="text-center">
+        <div class="bk-root" id="efb6cf3c-88f2-485e-970e-3820a45435b0" data-root-id="2090"></div>
             
           
         
@@ -343,44 +373,38 @@
 
     </div>
     <br><br>
-    <div align="center">
-                  <table class="table">
-                    <thead class="thead-dark">
-                      <tr>
-                        <th scope="col">S.N</th>
-                        <th scope="col">date</th>
-                        <th scope="col">Ozone</th>
-                        <th scope="col">Pm2.5</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {% for d in data3 %}
-                      <tr>
-                        <th scope="row">{{d.id}}</th>
-                        <td>{{d.date}}</td>
-                        <td>{{d.Ozone}}</td>
-                        <td>{{d.Pm25}}</td>
-                      </tr>
-                    {% endfor%}
-                    </tbody>
-                  </table>
-                  </div><br><br>
+       </div>
+       
+       <!-- Data Table -->
+       <div class="mt-4">
+         <h4 class="mb-3"><i class="fas fa-table me-2"></i>Detailed Data Records</h4>
+         <div class="table-responsive">
+           <table class="table table-modern">
+             <thead>
+               <tr>
+                 <th scope="col"><i class="fas fa-hashtag me-2"></i>S.N</th>
+                 <th scope="col"><i class="fas fa-calendar me-2"></i>Date</th>
+                 <th scope="col"><i class="fas fa-atom me-2"></i>Ozone</th>
+                 <th scope="col"><i class="fas fa-microscope me-2"></i>PM2.5</th>
+               </tr>
+             </thead>
+             <tbody>
+               {% for d in data3 %}
+               <tr>
+                 <th scope="row">{{d.id}}</th>
+                 <td>{{d.date}}</td>
+                 <td><span class="badge badge-info">{{d.Ozone}}</span></td>
+                 <td><span class="badge badge-warning">{{d.Pm25}}</span></td>
+               </tr>
+               {% endfor %}
+             </tbody>
+           </table>
+         </div>
+       </div>
+     </div>
+    {% endif %}
+  </div>
 </div>
-    
-
-
-
-
-{% endif %}
-
-
-    
-  </body>
-                
-
-
-	
-
 
 {% endblock %}
 

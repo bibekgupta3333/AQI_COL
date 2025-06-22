@@ -1,34 +1,595 @@
+{% extends "main/base.html" %} {% load static %} {% block title %}Sign Up - Air
+Quality Prediction{% endblock %} {% block head_extra %}
+<style>
+  .auth-container {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 2rem 0;
+  }
 
-{% extends "main/base.html" %}
+  .auth-card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    padding: 3rem;
+    max-width: 450px;
+    width: 100%;
+    margin: 0 auto;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
 
+  .auth-header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
 
-{% load static %}
+  .auth-header h1 {
+    color: #333;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    font-size: 2rem;
+  }
 
-{% block title %}about{% endblock %}
+  .auth-header p {
+    color: #666;
+    margin-bottom: 0;
+  }
 
+  .auth-form .form-group {
+    position: relative;
+    margin-bottom: 1.5rem;
+  }
 
-{% block content %}
-<hr class="featurette-divider">
+  .auth-form .form-control {
+    border: 2px solid #e1e5e9;
+    border-radius: 12px;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background: #f8f9fa;
+  }
 
-<div class="container h-100">
-  {{error}}<br>
-<div class="row h-100 justify-content-center align-items-center">
- <form action="{% url 'main:signup' %}" method="POST" enctype="multipart/form-data" class="form-signin">
-    {% csrf_token %}
-      <h1 class="h3 mb-3 font-weight-normal">Please register</h1>
-      <label for="inputEmail" class="sr-only">Username</label>
-      <input type="text" name="Username" class="form-control" placeholder="Username" required autofocus><br>
-      <label for="inputPassword" class="sr-only">Password</label>
-      <input type="password" name="Password" class="form-control" placeholder="Password" required><br>
-      <label for="inputPassword" class="sr-only">Confirm Password</label>
-      <input type="password" name="Password1" class="form-control" placeholder=" Confirm Password" required><br>
-      <button class="btn btn-lg btn-primary btn-block" type="submit">Sign up</button>
-    
+  .auth-form .form-control:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+    background: white;
+  }
 
+  .auth-form .form-control.valid {
+    border-color: #28a745;
+  }
 
+  .auth-form .form-control.invalid {
+    border-color: #dc3545;
+  }
 
-</form>  
+  .auth-form .form-control::placeholder {
+    color: #adb5bd;
+  }
+
+  .auth-form .input-icon {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #6c757d;
+    z-index: 10;
+  }
+
+  .auth-form .form-control.with-icon {
+    padding-left: 2.5rem;
+  }
+
+  .auth-btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    border-radius: 12px;
+    color: white;
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    width: 100%;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+
+  .auth-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+    color: white;
+  }
+
+  .auth-btn:active {
+    transform: translateY(0);
+  }
+
+  .auth-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+
+  .auth-links {
+    text-align: center;
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #e9ecef;
+  }
+
+  .auth-links a {
+    color: #667eea;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+  }
+
+  .auth-links a:hover {
+    color: #764ba2;
+    text-decoration: none;
+  }
+
+  .alert-custom {
+    border-radius: 12px;
+    border: none;
+    margin-bottom: 1.5rem;
+    padding: 1rem 1.25rem;
+  }
+
+  .alert-error {
+    background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+    color: white;
+  }
+
+  .alert-success {
+    background: linear-gradient(135deg, #51cf66, #40c057);
+    color: white;
+  }
+
+  .alert-info {
+    background: linear-gradient(135deg, #74c0fc, #339af0);
+    color: white;
+  }
+
+  .password-toggle {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    border: none;
+    background: none;
+    color: #6c757d;
+    cursor: pointer;
+    z-index: 10;
+  }
+
+  .loading-spinner {
+    display: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #ffffff;
+    border-top: 2px solid transparent;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-right: 0.5rem;
+  }
+
+  .validation-feedback {
+    display: block;
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    color: #dc3545;
+  }
+
+  .validation-feedback.valid {
+    color: #28a745;
+  }
+
+  .password-strength {
+    margin-top: 0.5rem;
+  }
+
+  .strength-meter {
+    height: 4px;
+    background: #e9ecef;
+    border-radius: 2px;
+    overflow: hidden;
+    margin-bottom: 0.5rem;
+  }
+
+  .strength-meter-fill {
+    height: 100%;
+    transition: width 0.3s ease;
+    border-radius: 2px;
+  }
+
+  .strength-weak {
+    background: #dc3545;
+  }
+  .strength-fair {
+    background: #ffc107;
+  }
+  .strength-good {
+    background: #fd7e14;
+  }
+  .strength-strong {
+    background: #28a745;
+  }
+
+  .strength-text {
+    font-size: 0.75rem;
+    color: #6c757d;
+  }
+
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  @media (max-width: 576px) {
+    .auth-card {
+      margin: 1rem;
+      padding: 2rem 1.5rem;
+    }
+
+    .auth-header h1 {
+      font-size: 1.5rem;
+    }
+  }
+</style>
+{% endblock %} {% block content %}
+<div class="auth-container">
+  <div class="container">
+    <div class="row justify-content-center align-items-center min-vh-100">
+      <div class="col-md-6 col-lg-5">
+        <div class="auth-card">
+          <div class="auth-header">
+            <h1>Create Account</h1>
+            <p>Join us to access air quality predictions</p>
+          </div>
+
+          <!-- Display Django Messages -->
+          {% if messages %} {% for message in messages %}
+          <div
+            class="alert alert-custom alert-{% if message.tags == 'error' %}error{% else %}{{ message.tags }}{% endif %}"
+            role="alert"
+          >
+            <i
+              class="fas fa-{% if message.tags == 'error' %}exclamation-circle{% elif message.tags == 'success' %}check-circle{% else %}info-circle{% endif %} mr-2"
+            ></i>
+            {{ message }}
+          </div>
+          {% endfor %} {% endif %}
+
+          <form
+            action="{% url 'main:signup' %}"
+            method="POST"
+            class="auth-form"
+            id="signupForm"
+            novalidate
+          >
+            {% csrf_token %}
+
+            <div class="form-group">
+              <i class="fas fa-user input-icon"></i>
+              <input
+                type="text"
+                name="Username"
+                class="form-control with-icon"
+                placeholder="Choose a username"
+                required
+                autofocus
+                autocomplete="username"
+                maxlength="150"
+                id="usernameField"
+                pattern="^[a-zA-Z0-9._-]{3,150}$"
+              />
+              <div class="validation-feedback" id="usernameError"></div>
+            </div>
+
+            <div class="form-group">
+              <i class="fas fa-lock input-icon"></i>
+              <input
+                type="password"
+                name="Password"
+                class="form-control with-icon"
+                placeholder="Create a password"
+                required
+                autocomplete="new-password"
+                id="passwordField"
+                minlength="8"
+              />
+              <button
+                type="button"
+                class="password-toggle"
+                onclick="togglePassword('passwordField', 'passwordIcon')"
+              >
+                <i class="fas fa-eye" id="passwordIcon"></i>
+              </button>
+              <div class="password-strength" id="passwordStrength">
+                <div class="strength-meter">
+                  <div class="strength-meter-fill" id="strengthMeter"></div>
+                </div>
+                <div class="strength-text" id="strengthText"></div>
+              </div>
+              <div class="validation-feedback" id="passwordError"></div>
+            </div>
+
+            <div class="form-group">
+              <i class="fas fa-lock input-icon"></i>
+              <input
+                type="password"
+                name="Password1"
+                class="form-control with-icon"
+                placeholder="Confirm your password"
+                required
+                autocomplete="new-password"
+                id="confirmPasswordField"
+              />
+              <button
+                type="button"
+                class="password-toggle"
+                onclick="togglePassword('confirmPasswordField', 'confirmPasswordIcon')"
+              >
+                <i class="fas fa-eye" id="confirmPasswordIcon"></i>
+              </button>
+              <div class="validation-feedback" id="confirmPasswordError"></div>
+            </div>
+
+            <button type="submit" class="auth-btn" id="signupBtn" disabled>
+              <span class="loading-spinner" id="loadingSpinner"></span>
+              <span id="btnText">Create Account</span>
+            </button>
+          </form>
+
+          <div class="auth-links">
+            <p class="mb-2">
+              Already have an account?
+              <a href="{% url 'main:login' %}">Sign in here</a>
+            </p>
+            <a href="{% url 'main:home-page' %}" class="text-muted">
+              <i class="fas fa-arrow-left mr-1"></i> Back to Home
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
-</div>
 
+<script>
+  let validationState = {
+    username: false,
+    password: false,
+    confirmPassword: false,
+  }
+
+  function togglePassword(fieldId, iconId) {
+    const passwordField = document.getElementById(fieldId)
+    const passwordIcon = document.getElementById(iconId)
+
+    if (passwordField.type === "password") {
+      passwordField.type = "text"
+      passwordIcon.classList.remove("fa-eye")
+      passwordIcon.classList.add("fa-eye-slash")
+    } else {
+      passwordField.type = "password"
+      passwordIcon.classList.remove("fa-eye-slash")
+      passwordIcon.classList.add("fa-eye")
+    }
+  }
+
+  function checkPasswordStrength(password) {
+    let strength = 0
+    let feedback = []
+
+    // Length check
+    if (password.length >= 8) strength += 1
+    else feedback.push("At least 8 characters")
+
+    // Lowercase check
+    if (/[a-z]/.test(password)) strength += 1
+    else feedback.push("One lowercase letter")
+
+    // Uppercase check
+    if (/[A-Z]/.test(password)) strength += 1
+    else feedback.push("One uppercase letter")
+
+    // Number check
+    if (/[0-9]/.test(password)) strength += 1
+    else feedback.push("One number")
+
+    // Special character check
+    if (/[^a-zA-Z0-9]/.test(password)) strength += 1
+    else feedback.push("One special character")
+
+    return { strength, feedback }
+  }
+
+  function updatePasswordStrength(password) {
+    const { strength, feedback } = checkPasswordStrength(password)
+    const strengthMeter = document.getElementById("strengthMeter")
+    const strengthText = document.getElementById("strengthText")
+
+    // Update meter
+    const percentage = (strength / 5) * 100
+    strengthMeter.style.width = percentage + "%"
+
+    // Update color and text
+    strengthMeter.className = "strength-meter-fill"
+    if (strength <= 1) {
+      strengthMeter.classList.add("strength-weak")
+      strengthText.textContent = "Weak password"
+    } else if (strength <= 2) {
+      strengthMeter.classList.add("strength-fair")
+      strengthText.textContent = "Fair password"
+    } else if (strength <= 3) {
+      strengthMeter.classList.add("strength-good")
+      strengthText.textContent = "Good password"
+    } else {
+      strengthMeter.classList.add("strength-strong")
+      strengthText.textContent = "Strong password"
+    }
+
+    if (feedback.length > 0 && password.length > 0) {
+      strengthText.textContent += " - Missing: " + feedback.join(", ")
+    }
+  }
+
+  function validateField(fieldId, errorId, validationFunc) {
+    const field = document.getElementById(fieldId)
+    const errorDiv = document.getElementById(errorId)
+    const isValid = validationFunc(field.value)
+
+    if (isValid === true) {
+      field.classList.remove("invalid")
+      field.classList.add("valid")
+      errorDiv.textContent = ""
+      errorDiv.classList.remove("validation-feedback")
+      errorDiv.classList.add("validation-feedback", "valid")
+    } else {
+      field.classList.remove("valid")
+      field.classList.add("invalid")
+      errorDiv.textContent = isValid
+      errorDiv.classList.remove("valid")
+      errorDiv.classList.add("validation-feedback")
+    }
+
+    return isValid === true
+  }
+
+  function validateUsername(username) {
+    if (!username) return "Username is required"
+    if (username.length < 3) return "Username must be at least 3 characters"
+    if (username.length > 150)
+      return "Username must be less than 150 characters"
+    if (!/^[a-zA-Z0-9._-]+$/.test(username))
+      return "Username can only contain letters, numbers, dots, underscores, and hyphens"
+    return true
+  }
+
+  function validatePassword(password) {
+    if (!password) return "Password is required"
+    if (password.length < 8) return "Password must be at least 8 characters"
+    const { strength } = checkPasswordStrength(password)
+    if (strength < 3) return "Password is too weak"
+    return true
+  }
+
+  function validateConfirmPassword(confirmPassword) {
+    const password = document.getElementById("passwordField").value
+    if (!confirmPassword) return "Please confirm your password"
+    if (password !== confirmPassword) return "Passwords do not match"
+    return true
+  }
+
+  function updateSubmitButton() {
+    const submitBtn = document.getElementById("signupBtn")
+    const allValid = Object.values(validationState).every((valid) => valid)
+    submitBtn.disabled = !allValid
+  }
+
+  // Event listeners
+  document
+    .getElementById("usernameField")
+    .addEventListener("input", function () {
+      validationState.username = validateField(
+        "usernameField",
+        "usernameError",
+        validateUsername
+      )
+      updateSubmitButton()
+    })
+
+  document
+    .getElementById("passwordField")
+    .addEventListener("input", function () {
+      const password = this.value
+      updatePasswordStrength(password)
+      validationState.password = validateField(
+        "passwordField",
+        "passwordError",
+        validatePassword
+      )
+
+      // Re-validate confirm password if it has a value
+      const confirmPassword = document.getElementById(
+        "confirmPasswordField"
+      ).value
+      if (confirmPassword) {
+        validationState.confirmPassword = validateField(
+          "confirmPasswordField",
+          "confirmPasswordError",
+          validateConfirmPassword
+        )
+      }
+
+      updateSubmitButton()
+    })
+
+  document
+    .getElementById("confirmPasswordField")
+    .addEventListener("input", function () {
+      validationState.confirmPassword = validateField(
+        "confirmPasswordField",
+        "confirmPasswordError",
+        validateConfirmPassword
+      )
+      updateSubmitButton()
+    })
+
+  // Form submission
+  document
+    .getElementById("signupForm")
+    .addEventListener("submit", function (e) {
+      // Validate all fields before submission
+      validationState.username = validateField(
+        "usernameField",
+        "usernameError",
+        validateUsername
+      )
+      validationState.password = validateField(
+        "passwordField",
+        "passwordError",
+        validatePassword
+      )
+      validationState.confirmPassword = validateField(
+        "confirmPasswordField",
+        "confirmPasswordError",
+        validateConfirmPassword
+      )
+
+      const allValid = Object.values(validationState).every((valid) => valid)
+
+      if (!allValid) {
+        e.preventDefault()
+        return
+      }
+
+      // Show loading state
+      const btn = document.getElementById("signupBtn")
+      const spinner = document.getElementById("loadingSpinner")
+      const btnText = document.getElementById("btnText")
+
+      btn.disabled = true
+      spinner.style.display = "inline-block"
+      btnText.textContent = "Creating Account..."
+    })
+
+  // Auto-hide alerts after 5 seconds
+  document.addEventListener("DOMContentLoaded", function () {
+    const alerts = document.querySelectorAll(".alert-custom")
+    alerts.forEach(function (alert) {
+      setTimeout(function () {
+        alert.style.opacity = "0"
+        setTimeout(function () {
+          alert.remove()
+        }, 300)
+      }, 5000)
+    })
+  })
+</script>
 {% endblock %}

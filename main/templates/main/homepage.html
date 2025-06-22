@@ -1,258 +1,412 @@
-{% extends "main/base.html" %} 
-
-{% load static %} 
-
-{% block title %}home  {% endblock %} 
-
-{% block content %}
-
-<div
-  id="carouselExampleFade"
-  class="carousel slide carousel-fade"
-  data-ride="carousel"
->
-  <div class="carousel-inner">
-    <div class="carousel-item active">
-      <img
-        src="{% static 'main/img/slide1.jpg'%}"
-        class="d-block w-100"
-        alt="..."
-        width="640"
-        height="400"
-      />
-    </div>
-    <div class="carousel-item">
-      <img
-        src="{% static 'main/img/slide6.jpg'%}"
-        class="d-block w-100"
-        alt="..."
-        width="640"
-        height="400"
-      />
-    </div>
-    <div class="carousel-item">
-      <img
-        src="{% static 'main/img/slide4.jpg'%}"
-        class="d-block w-100"
-        alt="..."
-        width="640"
-        height="400"
-      />
-    </div>
-  </div>
-  <a
-    class="carousel-control-prev"
-    href="#carouselExampleFade"
-    role="button"
-    data-slide="prev"
-  >
-    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-    <span class="sr-only">Previous</span>
-  </a>
-  <a
-    class="carousel-control-next"
-    href="#carouselExampleFade"
-    role="button"
-    data-slide="next"
-  >
-    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-    <span class="sr-only">Next</span>
-  </a>
-</div>
-
-<hr class="featurette-divider border-0" />
-<div class="container-fluid">
-  <div id="map" style="width: 100%; height: 400px"></div>
-
-  <script>
-    mapboxgl.accessToken =
-      "pk.eyJ1IjoiYmFzYW50YWtrayIsImEiOiJja2VtdzVram4waGExMzB0OG40a2V6cDF2In0.eN-MaxtSnouWNKOyB3niMA"
-    var map = new mapboxgl.Map({
-      container: "map",
-      style: "mapbox://styles/basantakkk/ckemu3ugy2mpd1at2l6llj69y",
-      center: [85.324, 27.7172],
-      zoom: 10.7,
-    })
-
-    var popup = new mapboxgl.Popup({ closeOnClick: false })
-      .setLngLat([85.324, 27.7172])
-      .setHTML(
-        '<p>AQI Kathmandu: <b>{{overall_aqi}}</b><br> Category: <a class="btn btn-default {{category_color}}">{{category_name}}</a><br>Current reporting area: Kathmandu</p>'
-      )
-      .addTo(map)
-  </script>
-</div>
-
-<hr class="featurette-divider border-0" />
-
-<div class="col-md-12">
-  <a
-    class="weatherwidget-io"
-    href="https://forecast7.com/en/27d7285d32/kathmandu/"
-    data-label_1="KATHMANDU"
-    data-label_2="WEATHER"
-    data-font="Open Sans"
-    data-theme="weather_one"
-    >KATHMANDU WEATHER</a
-  >
-  <script>
-    !(function (d, s, id) {
-      var js,
-        fjs = d.getElementsByTagName(s)[0]
-      if (!d.getElementById(id)) {
-        js = d.createElement(s)
-        js.id = id
-        js.src = "https://weatherwidget.io/js/widget.min.js"
-        fjs.parentNode.insertBefore(js, fjs)
-      }
-    })(document, "script", "weatherwidget-io-js")
-  </script>
-</div>
-
-<hr class="featurette-divider border-0" />
-
-<!--  -->
-<div class="container-fluid">
-  <!--  -->
-
-  <div class="row">
-    <div class="col-sm-6">
-      <div class="card border-0">
-        <div class="card-body">
-          {% if api_data.ninjas_data.O3 %}
-          <h5 class="card-title">
-            O<sub>3</sub> Current AQI: {{api_data.ninjas_data.O3.aqi}}
-          </h5>
-          <p class="card-text">
-            Ozone concentration: {{api_data.ninjas_data.O3.concentration}}
-            μg/m³<br />
-            {% if api_data.ninjas_data.O3.aqi <= 50 %} Air quality is good for
-            ozone levels. {% elif api_data.ninjas_data.O3.aqi <= 100 %} Moderate
-            ozone levels - acceptable for most people. {% elif
-            api_data.ninjas_data.O3.aqi <= 150 %} Unhealthy for sensitive groups
-            regarding ozone levels. {% else %} Unhealthy ozone levels for
-            general public. {% endif %} Current reporting area is Kathmandu
-          </p>
-          {% if api_data.ninjas_data.O3.aqi <= 50 %}
-          <a class="btn btn-default good">Good</a>
-          {% elif api_data.ninjas_data.O3.aqi <= 100 %}
-          <a class="btn btn-default moderate">Moderate</a>
-          {% elif api_data.ninjas_data.O3.aqi <= 150 %}
-          <a class="btn btn-default usg">Unhealthy for Sensitive Groups</a>
-          {% else %}
-          <a class="btn btn-default unhealthy">Unhealthy</a>
-          {% endif %} {% else %}
-          <h5 class="card-title">O<sub>3</sub> Current AQI: N/A</h5>
-          <p class="card-text">Ozone data is currently unavailable.</p>
-          <a class="btn btn-default">No Data</a>
-          {% endif %}
-
-          <img
-            src="{% static 'main/img/avatar_8-256.png'%}"
-            align="right"
-            height="142px"
-          />
+{% extends "main/base.html" %} {% load static %} {% block title %}Home - Air
+Quality Prediction{% endblock %} {% block content %}
+<div class="modern-container">
+  <div class="container">
+    <!-- Hero Carousel -->
+    <div class="modern-card mb-4">
+      <div
+        id="carouselExampleFade"
+        class="carousel slide carousel-fade"
+        data-ride="carousel"
+      >
+        <div class="carousel-inner" style="border-radius: var(--border-radius)">
+          <div class="carousel-item active">
+            <img
+              src="{% static 'main/img/slide1.jpg'%}"
+              class="d-block w-100"
+              alt="Air Quality Monitoring"
+              style="
+                height: 400px;
+                object-fit: cover;
+                border-radius: var(--border-radius);
+              "
+            />
+            <div
+              class="carousel-caption d-none d-md-block"
+              style="
+                background: rgba(0, 0, 0, 0.5);
+                padding: 1rem;
+                border-radius: var(--border-radius-sm);
+              "
+            >
+              <h5>
+                <i class="fas fa-wind me-2"></i>Real-time Air Quality Monitoring
+              </h5>
+              <p>
+                Track air quality index across Kathmandu with advanced
+                prediction models.
+              </p>
+            </div>
+          </div>
+          <div class="carousel-item">
+            <img
+              src="{% static 'main/img/slide6.jpg'%}"
+              class="d-block w-100"
+              alt="Environmental Data"
+              style="
+                height: 400px;
+                object-fit: cover;
+                border-radius: var(--border-radius);
+              "
+            />
+            <div
+              class="carousel-caption d-none d-md-block"
+              style="
+                background: rgba(0, 0, 0, 0.5);
+                padding: 1rem;
+                border-radius: var(--border-radius-sm);
+              "
+            >
+              <h5>
+                <i class="fas fa-chart-line me-2"></i>Data-Driven Predictions
+              </h5>
+              <p>
+                Machine learning powered forecasts for better environmental
+                awareness.
+              </p>
+            </div>
+          </div>
+          <div class="carousel-item">
+            <img
+              src="{% static 'main/img/slide4.jpg'%}"
+              class="d-block w-100"
+              alt="Clean Air Initiative"
+              style="
+                height: 400px;
+                object-fit: cover;
+                border-radius: var(--border-radius);
+              "
+            />
+            <div
+              class="carousel-caption d-none d-md-block"
+              style="
+                background: rgba(0, 0, 0, 0.5);
+                padding: 1rem;
+                border-radius: var(--border-radius-sm);
+              "
+            >
+              <h5><i class="fas fa-leaf me-2"></i>Clean Air Initiative</h5>
+              <p>
+                Working towards a cleaner, healthier environment for everyone.
+              </p>
+            </div>
+          </div>
         </div>
+        <a
+          class="carousel-control-prev"
+          href="#carouselExampleFade"
+          role="button"
+          data-slide="prev"
+        >
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="sr-only">Previous</span>
+        </a>
+        <a
+          class="carousel-control-next"
+          href="#carouselExampleFade"
+          role="button"
+          data-slide="next"
+        >
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="sr-only">Next</span>
+        </a>
       </div>
     </div>
-    <div class="col-sm-6">
-      <div class="card border-0">
-        <div class="card-body">
-          {% if api_data.ninjas_data.PM2.5 %}
-          <h5 class="card-title">
-            PM2.5 Current AQI: {{api_data.ninjas_data.PM2.5.aqi}}
-          </h5>
-          <p class="card-text">
-            PM2.5 concentration: {{api_data.ninjas_data.PM2.5.concentration}}
-            μg/m³<br />
-            {{category_description}} Current reporting area is Kathmandu
-          </p>
-          <a class="btn btn-default {{category_color}}">{{category_name}}</a>
-          {% else %}
-          <h5 class="card-title">PM2.5 Current AQI: {{overall_aqi}}</h5>
-          <p class="card-text">
-            {{category_description}} Current reporting area is Kathmandu
-          </p>
-          <a class="btn btn-default {{category_color}}">{{category_name}}</a>
-          {% endif %}
 
-          <img src="{% static 'main/img/1.1.png'%}" align="right" />
-        </div>
+    <!-- Interactive Map -->
+    <div class="modern-card">
+      <div class="modern-card-header">
+        <h2><i class="fas fa-map-marked-alt me-2"></i>Live Air Quality Map</h2>
+        <p>
+          Interactive map showing current air quality conditions in Kathmandu
+        </p>
+      </div>
+      <div
+        id="map"
+        style="
+          width: 100%;
+          height: 400px;
+          border-radius: var(--border-radius-sm);
+        "
+      ></div>
+      <script>
+        mapboxgl.accessToken =
+          "pk.eyJ1IjoiYmFzYW50YWtrayIsImEiOiJja2VtdzVram4waGExMzB0OG40a2V6cDF2In0.eN-MaxtSnouWNKOyB3niMA"
+        var map = new mapboxgl.Map({
+          container: "map",
+          style: "mapbox://styles/basantakkk/ckemu3ugy2mpd1at2l6llj69y",
+          center: [85.324, 27.7172],
+          zoom: 10.7,
+        })
+
+        var popup = new mapboxgl.Popup({ closeOnClick: false })
+          .setLngLat([85.324, 27.7172])
+          .setHTML(
+            '<div style="text-align: center; padding: 0.5rem;"><p><i class="fas fa-wind me-1"></i>AQI Kathmandu: <b>{{overall_aqi}}</b><br> Category: <span class="badge {{category_color}}">{{category_name}}</span><br><i class="fas fa-map-marker-alt me-1"></i>Current reporting area: Kathmandu</p></div>'
+          )
+          .addTo(map)
+      </script>
+    </div>
+
+    <!-- Weather Widget -->
+    <div class="modern-card">
+      <div class="modern-card-header">
+        <h2><i class="fas fa-cloud-sun me-2"></i>Current Weather</h2>
+        <p>Live weather conditions for Kathmandu</p>
+      </div>
+      <div class="text-center">
+        <a
+          class="weatherwidget-io"
+          href="https://forecast7.com/en/27d7285d32/kathmandu/"
+          data-label_1="KATHMANDU"
+          data-label_2="WEATHER"
+          data-font="Open Sans"
+          data-theme="weather_one"
+          >KATHMANDU WEATHER</a
+        >
+        <script>
+          !(function (d, s, id) {
+            var js,
+              fjs = d.getElementsByTagName(s)[0]
+            if (!d.getElementById(id)) {
+              js = d.createElement(s)
+              js.id = id
+              js.src = "https://weatherwidget.io/js/widget.min.js"
+              fjs.parentNode.insertBefore(js, fjs)
+            }
+          })(document, "script", "weatherwidget-io-js")
+        </script>
       </div>
     </div>
-  </div>
 
-  <!-- Additional Air Quality Information -->
-  {% if api_data.ninjas_data %}
-  <div class="row mt-4">
-    <div class="col-md-12">
-      <div class="card">
-        <div class="card-header">
-          <h5>Detailed Air Quality Information</h5>
-          <small class="text-muted">Last updated: {{last_updated}}</small>
+    <!-- Current Air Quality Cards -->
+    <div class="row">
+      <div class="col-lg-6 mb-4">
+        <div class="modern-card h-100">
+          <div class="card-body d-flex align-items-center">
+            <div class="flex-grow-1">
+              {% if api_data.ninjas_data.O3 %}
+              <h5 class="card-title mb-3">
+                <i class="fas fa-atom me-2 text-primary"></i>O<sub>3</sub>
+                Current AQI: {{api_data.ninjas_data.O3.aqi}}
+              </h5>
+              <p class="card-text">
+                <i class="fas fa-flask me-2"></i>Ozone concentration:
+                {{api_data.ninjas_data.O3.concentration}} μg/m³<br />
+                <i class="fas fa-info-circle me-2"></i>
+                {% if api_data.ninjas_data.O3.aqi <= 50 %} Air quality is good
+                for ozone levels. {% elif api_data.ninjas_data.O3.aqi <= 100 %}
+                Moderate ozone levels - acceptable for most people. {% elif
+                api_data.ninjas_data.O3.aqi <= 150 %} Unhealthy for sensitive
+                groups regarding ozone levels. {% else %} Unhealthy ozone levels
+                for general public. {% endif %}
+              </p>
+              {% if api_data.ninjas_data.O3.aqi <= 50 %}
+              <span class="badge good">Good</span>
+              {% elif api_data.ninjas_data.O3.aqi <= 100 %}
+              <span class="badge moderate">Moderate</span>
+              {% elif api_data.ninjas_data.O3.aqi <= 150 %}
+              <span class="badge usg">Unhealthy for Sensitive Groups</span>
+              {% else %}
+              <span class="badge unhealthy">Unhealthy</span>
+              {% endif %} {% else %}
+              <h5 class="card-title mb-3">
+                <i class="fas fa-atom me-2 text-muted"></i>O<sub>3</sub> Current
+                AQI: N/A
+              </h5>
+              <p class="card-text">Ozone data is currently unavailable.</p>
+              <span class="badge badge-secondary">No Data</span>
+              {% endif %}
+            </div>
+            <div class="text-end">
+              <img
+                src="{% static 'main/img/avatar_8-256.png'%}"
+                alt="Ozone Icon"
+                style="height: 80px; opacity: 0.8"
+              />
+            </div>
+          </div>
         </div>
-        <div class="card-body">
-          <div class="row">
-            {% if api_data.ninjas_data.CO %}
-            <div class="col-md-2">
-              <h6>CO</h6>
-              <p>
-                {{api_data.ninjas_data.CO.aqi}} AQI<br />
-                <small>{{api_data.ninjas_data.CO.concentration}} μg/m³</small>
+      </div>
+
+      <div class="col-lg-6 mb-4">
+        <div class="modern-card h-100">
+          <div class="card-body d-flex align-items-center">
+            <div class="flex-grow-1">
+              {% if api_data.ninjas_data.PM2.5 %}
+              <h5 class="card-title mb-3">
+                <i class="fas fa-microscope me-2 text-primary"></i>PM2.5 Current
+                AQI: {{api_data.ninjas_data.PM2.5.aqi}}
+              </h5>
+              <p class="card-text">
+                <i class="fas fa-flask me-2"></i>PM2.5 concentration:
+                {{api_data.ninjas_data.PM2.5.concentration}} μg/m³<br />
+                <i class="fas fa-info-circle me-2"></i>{{category_description}}
               </p>
-            </div>
-            {% endif %} {% if api_data.ninjas_data.NO2 %}
-            <div class="col-md-2">
-              <h6>NO₂</h6>
-              <p>
-                {{api_data.ninjas_data.NO2.aqi}} AQI<br />
-                <small>{{api_data.ninjas_data.NO2.concentration}} μg/m³</small>
+              <span class="badge {{category_color}}">{{category_name}}</span>
+              {% else %}
+              <h5 class="card-title mb-3">
+                <i class="fas fa-microscope me-2 text-primary"></i>PM2.5 Current
+                AQI: {{overall_aqi}}
+              </h5>
+              <p class="card-text">
+                <i class="fas fa-info-circle me-2"></i>{{category_description}}
               </p>
+              <span class="badge {{category_color}}">{{category_name}}</span>
+              {% endif %}
             </div>
-            {% endif %} {% if api_data.ninjas_data.SO2 %}
-            <div class="col-md-2">
-              <h6>SO₂</h6>
-              <p>
-                {{api_data.ninjas_data.SO2.aqi}} AQI<br />
-                <small>{{api_data.ninjas_data.SO2.concentration}} μg/m³</small>
-              </p>
-            </div>
-            {% endif %} {% if api_data.ninjas_data.PM10 %}
-            <div class="col-md-2">
-              <h6>PM10</h6>
-              <p>
-                {{api_data.ninjas_data.PM10.aqi}} AQI<br />
-                <small>{{api_data.ninjas_data.PM10.concentration}} μg/m³</small>
-              </p>
-            </div>
-            {% endif %}
-            <div class="col-md-4">
-              <h6>Overall AQI</h6>
-              <h4 class="text-{{category_color}}">{{overall_aqi}}</h4>
-              <span class="badge badge-{{category_color}}"
-                >{{category_name}}</span
-              >
+            <div class="text-end">
+              <img
+                src="{% static 'main/img/1.1.png'%}"
+                alt="PM2.5 Icon"
+                style="height: 80px; opacity: 0.8"
+              />
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-  {% endif %}
 
-  <div class="jumbotron jumbotron-fluid my-4">
-    <div class="container border-0">
-      <h1 class="display-4">Air Quality Index (AQI)</h1>
-      <p class="lead">
-        An air quality index is used by government agencies to communicate to
-        the public how polluted the air currently is or how polluted is the
-        forecast to become. Public health risks increase as the AQI rises.
-        Machine Learning algorithm can predict AQI using various parameters such
-        as meteorological factors, particulate matters (PM) etc. so that air
-        quality can be kept on check.
-      </p>
+    <!-- Detailed Air Quality Information -->
+    {% if api_data.ninjas_data %}
+    <div class="modern-card">
+      <div class="modern-card-header">
+        <h2>
+          <i class="fas fa-chart-bar me-2"></i>Detailed Air Quality Information
+        </h2>
+        <p>Last updated: {{last_updated}}</p>
+      </div>
+      <div class="row">
+        {% if api_data.ninjas_data.CO %}
+        <div class="col-md-2 mb-3">
+          <div
+            class="text-center p-3"
+            style="
+              background: rgba(255, 255, 255, 0.5);
+              border-radius: var(--border-radius-sm);
+            "
+          >
+            <h6><i class="fas fa-smog me-2"></i>CO</h6>
+            <h4 class="text-primary">{{api_data.ninjas_data.CO.aqi}}</h4>
+            <small class="text-muted"
+              >{{api_data.ninjas_data.CO.concentration}} μg/m³</small
+            >
+          </div>
+        </div>
+        {% endif %} {% if api_data.ninjas_data.NO2 %}
+        <div class="col-md-2 mb-3">
+          <div
+            class="text-center p-3"
+            style="
+              background: rgba(255, 255, 255, 0.5);
+              border-radius: var(--border-radius-sm);
+            "
+          >
+            <h6><i class="fas fa-industry me-2"></i>NO₂</h6>
+            <h4 class="text-primary">{{api_data.ninjas_data.NO2.aqi}}</h4>
+            <small class="text-muted"
+              >{{api_data.ninjas_data.NO2.concentration}} μg/m³</small
+            >
+          </div>
+        </div>
+        {% endif %} {% if api_data.ninjas_data.SO2 %}
+        <div class="col-md-2 mb-3">
+          <div
+            class="text-center p-3"
+            style="
+              background: rgba(255, 255, 255, 0.5);
+              border-radius: var(--border-radius-sm);
+            "
+          >
+            <h6><i class="fas fa-fire me-2"></i>SO₂</h6>
+            <h4 class="text-primary">{{api_data.ninjas_data.SO2.aqi}}</h4>
+            <small class="text-muted"
+              >{{api_data.ninjas_data.SO2.concentration}} μg/m³</small
+            >
+          </div>
+        </div>
+        {% endif %} {% if api_data.ninjas_data.PM10 %}
+        <div class="col-md-2 mb-3">
+          <div
+            class="text-center p-3"
+            style="
+              background: rgba(255, 255, 255, 0.5);
+              border-radius: var(--border-radius-sm);
+            "
+          >
+            <h6><i class="fas fa-eye-dropper me-2"></i>PM10</h6>
+            <h4 class="text-primary">{{api_data.ninjas_data.PM10.aqi}}</h4>
+            <small class="text-muted"
+              >{{api_data.ninjas_data.PM10.concentration}} μg/m³</small
+            >
+          </div>
+        </div>
+        {% endif %}
+        <div class="col-md-4 mb-3">
+          <div
+            class="text-center p-3"
+            style="
+              background: var(--primary-gradient);
+              color: white;
+              border-radius: var(--border-radius-sm);
+            "
+          >
+            <h6><i class="fas fa-tachometer-alt me-2"></i>Overall AQI</h6>
+            <h2>{{overall_aqi}}</h2>
+            <span class="badge badge-light">{{category_name}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- About AQI Section -->
+    <div class="modern-card">
+      <div class="modern-card-header">
+        <h2><i class="fas fa-lightbulb me-2"></i>Air Quality Index (AQI)</h2>
+      </div>
+      <div class="row align-items-center">
+        <div class="col-md-8">
+          <p class="lead">
+            An air quality index is used by government agencies to communicate
+            to the public how polluted the air currently is or how polluted is
+            the forecast to become. Public health risks increase as the AQI
+            rises.
+          </p>
+          <p>
+            <i class="fas fa-robot me-2"></i>Machine Learning algorithm can
+            predict AQI using various parameters such as meteorological factors,
+            particulate matters (PM) etc. so that air quality can be kept on
+            check.
+          </p>
+          {% if user.is_authenticated %}
+          <div class="mt-4">
+            <a href="{% url 'main:predict-aqi' %}" class="btn btn-modern me-3">
+              <i class="fas fa-crystal-ball me-2"></i>Predict AQI
+            </a>
+            <a href="{% url 'main:past-data' %}" class="btn btn-modern">
+              <i class="fas fa-chart-line me-2"></i>View Past Data
+            </a>
+          </div>
+          {% else %}
+          <div class="mt-4">
+            <a href="{% url 'main:login' %}" class="btn btn-modern me-3">
+              <i class="fas fa-sign-in-alt me-2"></i>Login to Predict
+            </a>
+            <a href="{% url 'main:signup' %}" class="btn btn-modern">
+              <i class="fas fa-user-plus me-2"></i>Sign Up
+            </a>
+          </div>
+          {% endif %}
+        </div>
+        <div class="col-md-4 text-center">
+          <i
+            class="fas fa-wind"
+            style="font-size: 8rem; color: var(--primary-color); opacity: 0.3"
+          ></i>
+        </div>
+      </div>
     </div>
   </div>
-
-  {% endblock %}
 </div>
+{% endblock %}

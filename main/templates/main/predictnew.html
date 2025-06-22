@@ -1,162 +1,615 @@
-
-{% extends "main/base.html" %}
-
-
-{% load static %}
-
-{% block title %}AQI Prediction{% endblock %}
-
-{% block head_extra %} 
-<meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta charset="UTF-8">
-  <link href='https://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
-<link href='https://fonts.googleapis.com/css?family=Arimo' rel='stylesheet' type='text/css'>
-<link href='https://fonts.googleapis.com/css?family=Hind:300' rel='stylesheet' type='text/css'>
-<link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+{% extends "main/base.html" %} {% load static %} {% block title %}AQI
+Prediction{% endblock %} {% block head_extra %}
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta charset="UTF-8" />
 
 <style>
-    @import url(https://fonts.googleapis.com/css?family=Open+Sans);
-.btn { display: inline-block; *display: inline; *zoom: 1; padding: 4px 10px 4px; margin-bottom: 0; font-size: 13px; line-height: 18px; color: #333333; text-align: center;text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75); vertical-align: middle; background-color: #f5f5f5; background-image: -moz-linear-gradient(top, #ffffff, #e6e6e6); background-image: -ms-linear-gradient(top, #ffffff, #e6e6e6); background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), to(#e6e6e6)); background-image: -webkit-linear-gradient(top, #ffffff, #e6e6e6); background-image: -o-linear-gradient(top, #ffffff, #e6e6e6); background-image: linear-gradient(top, #ffffff, #e6e6e6); background-repeat: repeat-x; filter: progid:dximagetransform.microsoft.gradient(startColorstr=#ffffff, endColorstr=#e6e6e6, GradientType=0); border-color: #e6e6e6 #e6e6e6 #e6e6e6; border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25); border: 1px solid #e6e6e6; -webkit-border-radius: 4px; -moz-border-radius: 4px; border-radius: 4px; -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05); -moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05); cursor: pointer; *margin-left: .3em; }
-.btn:hover, .btn:active, .btn.active, .btn.disabled, .btn[disabled] { background-color: #e6e6e6; }
-.btn-large { padding: 9px 14px; font-size: 15px; line-height: normal; -webkit-border-radius: 5px; -moz-border-radius: 5px; border-radius: 5px; }
-.btn:hover { color: #333333; text-decoration: none; background-color: #e6e6e6; background-position: 0 -15px; -webkit-transition: background-position 0.1s linear; -moz-transition: background-position 0.1s linear; -ms-transition: background-position 0.1s linear; -o-transition: background-position 0.1s linear; transition: background-position 0.1s linear; }
-.btn-primary, .btn-primary:hover { text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25); color: #ffffff; }
-.btn-primary.active { color: rgba(255, 255, 255, 0.75); }
-.btn-primary { background-color: #4a77d4; background-image: -moz-linear-gradient(top, #6eb6de, #4a77d4); background-image: -ms-linear-gradient(top, #6eb6de, #4a77d4); background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#6eb6de), to(#4a77d4)); background-image: -webkit-linear-gradient(top, #6eb6de, #4a77d4); background-image: -o-linear-gradient(top, #6eb6de, #4a77d4); background-image: linear-gradient(top, #6eb6de, #4a77d4); background-repeat: repeat-x; filter: progid:dximagetransform.microsoft.gradient(startColorstr=#6eb6de, endColorstr=#4a77d4, GradientType=0);  border: 1px solid #3762bc; text-shadow: 1px 1px 1px rgba(0,0,0,0.4); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.5); }
-.btn-primary:hover, .btn-primary:active, .btn-primary.active, .btn-primary.disabled, .btn-primary[disabled] { filter: none; background-color: #4a77d4; }
-.btn-block { width: 100%; display:block; }
+  /* Modern page styling with improved colors */
+  .prediction-page {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background-attachment: fixed;
+    min-height: calc(100vh - 120px);
+    padding: 40px 20px;
+    position: relative;
+  }
 
-* { -webkit-box-sizing:border-box; -moz-box-sizing:border-box; -ms-box-sizing:border-box; -o-box-sizing:border-box; box-sizing:border-box; }
+  .prediction-page::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(
+        circle at 20% 50%,
+        rgba(255, 255, 255, 0.1),
+        transparent 50%
+      ),
+      radial-gradient(
+        circle at 80% 20%,
+        rgba(255, 255, 255, 0.05),
+        transparent 50%
+      );
+    pointer-events: none;
+  }
 
-html { width: 100%; height:100%; overflow:hidden;}
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
 
-body { 
-	width: 100%;
-	height:100%;
-	font-family: 'Open Sans', sans-serif;
-	background: #092756;
-	color: #fff;
-	font-size: 18px;
-	text-align:center;
-	letter-spacing:1.2px;
-	background: -moz-radial-gradient(0% 100%, ellipse cover, rgba(104,128,138,.4) 10%,rgba(138,114,76,0) 40%),-moz-linear-gradient(top,  rgba(57,173,219,.25) 0%, rgba(42,60,87,.4) 100%), -moz-linear-gradient(-45deg,  #670d10 0%, #092756 100%);
-	background: -webkit-radial-gradient(0% 100%, ellipse cover, rgba(104,128,138,.4) 10%,rgba(138,114,76,0) 40%), -webkit-linear-gradient(top,  rgba(57,173,219,.25) 0%,rgba(42,60,87,.4) 100%), -webkit-linear-gradient(-45deg,  #670d10 0%,#092756 100%);
-	background: -o-radial-gradient(0% 100%, ellipse cover, rgba(104,128,138,.4) 10%,rgba(138,114,76,0) 40%), -o-linear-gradient(top,  rgba(57,173,219,.25) 0%,rgba(42,60,87,.4) 100%), -o-linear-gradient(-45deg,  #670d10 0%,#092756 100%);
-	background: -ms-radial-gradient(0% 100%, ellipse cover, rgba(104,128,138,.4) 10%,rgba(138,114,76,0) 40%), -ms-linear-gradient(top,  rgba(57,173,219,.25) 0%,rgba(42,60,87,.4) 100%), -ms-linear-gradient(-45deg,  #670d10 0%,#092756 100%);
-	background: -webkit-radial-gradient(0% 100%, ellipse cover, rgba(104,128,138,.4) 10%,rgba(138,114,76,0) 40%), linear-gradient(to bottom,  rgba(57,173,219,.25) 0%,rgba(42,60,87,.4) 100%), linear-gradient(135deg,  #670d10 0%,#092756 100%);
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3E1D6D', endColorstr='#092756',GradientType=1 );
-}
-.login { 
-	position: absolute;
-	top: 1%;
-	left: 50%;
-	margin: -75px 0 0 -150px;
-	width:400px;
-	height:400px;
-}
+  .page-header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
 
-.login h3 { color: #fff; text-shadow: 0 0 10px rgba(0,0,0,0.3); letter-spacing:0.5px; text-align:center; }
-.login h2 { color: #fff; text-shadow: 0 0 10px rgba(0,0,0,0.3); letter-spacing:0.5px; text-align:center; }
+  .page-title {
+    background: linear-gradient(45deg, #ffffff, #f8f9ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    letter-spacing: -0.5px;
+  }
 
-input { 
-	width: 100%; 
-	margin-bottom: 10px; 
-	background: rgba(0,0,0,0.3);
-	border: none;
-	outline: none;
-	padding: 10px;
-	font-size: 13px;
-	color: #fff;
-	text-shadow: 1px 1px 1px rgba(0,0,0,0.3);
-	border: 1px solid rgba(0,0,0,0.3);
-	border-radius: 4px;
-	box-shadow: inset 0 -5px 45px rgba(100,100,100,0.2), 0 1px 1px rgba(255,255,255,0.2);
-	-webkit-transition: box-shadow .5s ease;
-	-moz-transition: box-shadow .5s ease;
-	-o-transition: box-shadow .5s ease;
-	-ms-transition: box-shadow .5s ease;
-	transition: box-shadow .5s ease;
-}
-input:focus { box-shadow: inset 0 -5px 45px rgba(100,100,100,0.4), 0 1px 1px rgba(255,255,255,0.2); }
+  .page-subtitle {
+    color: rgba(255, 255, 255, 0.95);
+    font-size: 1.2rem;
+    font-weight: 400;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
 
-body{
-    overflow-y : auto;
-}
+  .main-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    margin-bottom: 40px;
+  }
 
-* {
-  box-sizing: border-box;
-}
+  /* Form Section */
+  .form-section {
+    background: linear-gradient(145deg, #ffffff, #f8f9ff);
+    border-radius: 16px;
+    padding: 35px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
 
-/* Create three equal columns that floats next to each other */
-.column {
-  float: left;
-  width: 33.33%;
-  padding: 30px;
-  height: 500px; /* Should be removed. Only for demonstration */
-}
+  .form-header {
+    margin-bottom: 25px;
+  }
 
-/* Clear floats after the columns */
-.row:after {
-  content: "";
-  display: table;
-  clear: both;
-}
-</style>{% endblock %}
-{% block content %}
+  .form-header h3 {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+    letter-spacing: -0.3px;
+  }
 
-<div class="row">
-  <div class="column" ">
-	<br>
-	<br>
-	<br>
-	<br>
-<br>
-	<h2 align=center>Kathmandu</h2>
-    <h2 align=center>Air Quality Index</h2>
-  </div>
+  .form-header p {
+    color: #64748b;
+    font-size: 1rem;
+    margin: 0;
+    font-weight: 500;
+  }
 
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 20px;
+  }
 
+  .form-group {
+    margin-bottom: 20px;
+  }
 
+  .form-group label {
+    display: block;
+    color: #374151;
+    font-weight: 600;
+    margin-bottom: 6px;
+    font-size: 0.95rem;
+    letter-spacing: 0.3px;
+  }
 
-  <div class="column" >
-    	<form action="{% url 'main:predict-aqi' %}" method="POST" enctype="multipart/form-data">
-            {% csrf_token %}
-    	<input type="number" step="0.01" name="T" placeholder="T -- Average Temperature (°C)" required />
-        <input type="number" step="0.01"  name="TM" placeholder="TM -- Maximum temperature (°C)" required />
-		<input type="number" step="0.01"  name="Tm" placeholder="Tm -- Minimum temperature (°C)" required />
-		<input type="number" step="0.01"  name="SLP" placeholder="SLP -- Atmospheric pressure at sea level (hPa)" required />
-		<input type="number" step="0.01"  name="H" placeholder="H -- Average relative humidity (%)" required />
-		<input type="number" step="0.01"  name="VV" placeholder="VV -- Average visibility (Km)" required />
-		<input type="number"  step="0.01" name="V" placeholder="V -- Average wind speed (Km/h)" required />
-		<input type="number" step="0.01"  name="VM" placeholder="VM -- Maximum sustained wind speed (Km/h)" required />
-		
-        <button type="submit" class="btn btn-primary btn-block btn-large">Predict</button>
-    </form>
-  </div>
- 
+  .form-group input {
+    width: 100%;
+    padding: 14px 18px;
+    border: 2px solid #e2e8f0;
+    border-radius: 10px;
+    font-size: 1rem;
+    color: #1e293b;
+    background: linear-gradient(145deg, #ffffff, #f8fafc);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
 
+  .form-group input:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1),
+      0 4px 12px rgba(0, 0, 0, 0.15);
+    transform: translateY(-1px);
+  }
 
- <div class="column" >
- <br>
+  .form-group input::placeholder {
+    color: #94a3b8;
+    font-weight: 400;
+  }
 
-    <h2>Prediction</h2>
-    {{ prediction_text }}
-    {% if actual %}
-        <div class="card" style="color:#333333;width: 300px;height:300px;">
-            <div class="card-body">
-                <h5 class="card-title"> AQI : {{actual}} </h5>
-                <a  class="btn btn-default {{color}} ">{{name}}</a>
-                <p>{{descp}}</p>
-                <img src="{% static 'main/img/1.1.png'%}" >
-            </div>
+  .submit-btn {
+    width: 100%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    padding: 16px 24px;
+    border-radius: 12px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .submit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+    background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
+  }
+
+  /* Results Section */
+  .results-section {
+    background: linear-gradient(145deg, #ffffff, #f8f9ff);
+    border-radius: 16px;
+    padding: 35px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .results-header {
+    text-align: center;
+    margin-bottom: 25px;
+  }
+
+  .results-header h3 {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+    letter-spacing: -0.3px;
+  }
+
+  .results-content {
+    text-align: center;
+  }
+
+  .aqi-display {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 35px;
+    border-radius: 16px;
+    margin-bottom: 25px;
+    box-shadow: 0 8px 32px rgba(102, 126, 234, 0.3);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .aqi-display::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, rgba(255, 255, 255, 0.1), transparent);
+    pointer-events: none;
+  }
+
+  .aqi-value {
+    font-size: 3.5rem;
+    font-weight: 800;
+    margin-bottom: 12px;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    position: relative;
+    z-index: 1;
+  }
+
+  .aqi-category {
+    font-size: 1.4rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .aqi-description {
+    color: #64748b;
+    font-size: 1.05rem;
+    line-height: 1.6;
+    margin-bottom: 25px;
+    font-weight: 500;
+  }
+
+  .health-badge {
+    display: inline-block;
+    padding: 10px 20px;
+    border-radius: 25px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  .no-result {
+    text-align: center;
+    color: #64748b;
+    font-size: 1.1rem;
+    padding: 45px 25px;
+  }
+
+  .no-result i {
+    font-size: 3.5rem;
+    background: linear-gradient(135deg, #cbd5e1, #94a3b8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 18px;
+    display: block;
+  }
+
+  .no-result h4 {
+    color: #374151;
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+
+  /* Info Cards */
+  .info-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+  }
+
+  .info-card {
+    background: linear-gradient(145deg, #ffffff, #f8f9ff);
+    border-radius: 16px;
+    padding: 30px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .info-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15), 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  .info-card h4 {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+    letter-spacing: -0.2px;
+  }
+
+  .info-card p {
+    color: #64748b;
+    font-size: 1rem;
+    line-height: 1.7;
+    margin: 0;
+    font-weight: 500;
+  }
+
+  /* Loading */
+  .loading {
+    display: none;
+    text-align: center;
+    padding: 20px;
+    color: #666;
+  }
+
+  .spinner {
+    width: 30px;
+    height: 30px;
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #667eea;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 10px;
+  }
+
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .main-content {
+      grid-template-columns: 1fr;
+      gap: 30px;
+    }
+
+    .form-row {
+      grid-template-columns: 1fr;
+    }
+
+    .info-cards {
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+
+    .page-title {
+      font-size: 2rem;
+    }
+
+    .prediction-page {
+      padding: 20px 15px;
+    }
+  }
+
+  /* AQI Category Colors - Modern Gradients */
+  .good {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: white;
+  }
+  .moderate {
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    color: white;
+  }
+  .usg {
+    background: linear-gradient(135deg, #f97316, #ea580c);
+    color: white;
+  }
+  .unhealthy {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    color: white;
+  }
+  .very_unhealthy {
+    background: linear-gradient(135deg, #a855f7, #9333ea);
+    color: white;
+  }
+  .hazardous {
+    background: linear-gradient(135deg, #991b1b, #7f1d1d);
+    color: white;
+  }
+</style>
+{% endblock %} {% block content %}
+<div class="prediction-page">
+  <div class="container">
+    <!-- Page Header -->
+    <div class="page-header">
+      <h1 class="page-title">Kathmandu Air Quality Prediction</h1>
+      <p class="page-subtitle">
+        Enter weather parameters to predict Air Quality Index
+      </p>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <!-- Form Section -->
+      <div class="form-section">
+        <div class="form-header">
+          <h3>Weather Parameters</h3>
+          <p>Fill in the meteorological data below</p>
         </div>
 
-    {% endif %}
+        <form
+          action="{% url 'main:predict-aqi' %}"
+          method="POST"
+          id="predictionForm"
+        >
+          {% csrf_token %}
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="T">Average Temperature (°C)</label>
+              <input
+                type="number"
+                step="0.01"
+                name="T"
+                id="T"
+                placeholder="25.5"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="TM">Maximum Temperature (°C)</label>
+              <input
+                type="number"
+                step="0.01"
+                name="TM"
+                id="TM"
+                placeholder="32.0"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="Tm">Minimum Temperature (°C)</label>
+              <input
+                type="number"
+                step="0.01"
+                name="Tm"
+                id="Tm"
+                placeholder="18.5"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="SLP">Sea Level Pressure (hPa)</label>
+              <input
+                type="number"
+                step="0.01"
+                name="SLP"
+                id="SLP"
+                placeholder="1013.25"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="H">Relative Humidity (%)</label>
+              <input
+                type="number"
+                step="0.01"
+                name="H"
+                id="H"
+                placeholder="65"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="VV">Average Visibility (Km)</label>
+              <input
+                type="number"
+                step="0.01"
+                name="VV"
+                id="VV"
+                placeholder="10.0"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="V">Average Wind Speed (Km/h)</label>
+              <input
+                type="number"
+                step="0.01"
+                name="V"
+                id="V"
+                placeholder="15.0"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="VM">Max Wind Speed (Km/h)</label>
+              <input
+                type="number"
+                step="0.01"
+                name="VM"
+                id="VM"
+                placeholder="25.0"
+                required
+              />
+            </div>
+          </div>
+
+          <button type="submit" class="submit-btn">Predict AQI</button>
+        </form>
+
+        <div class="loading" id="loadingSpinner">
+          <div class="spinner"></div>
+          <p>Analyzing data...</p>
+        </div>
+      </div>
+
+      <!-- Results Section -->
+      <div class="results-section">
+        <div class="results-header">
+          <h3>Prediction Results</h3>
+        </div>
+
+        <div class="results-content">
+          {% if prediction_text %}
+          <div
+            style="
+              background: #e3f2fd;
+              color: #1976d2;
+              padding: 15px;
+              border-radius: 5px;
+              margin-bottom: 20px;
+            "
+          >
+            {{ prediction_text }}
+          </div>
+          {% endif %} {% if actual %}
+          <div class="aqi-display">
+            <div class="aqi-value">{{ actual }}</div>
+            <div class="aqi-category">{{ name }}</div>
+          </div>
+
+          <div class="aqi-description">{{ descp }}</div>
+
+          <div class="health-badge {{ color }}">{{ name }}</div>
+          {% else %}
+          <div class="no-result">
+            <i class="fas fa-chart-line"></i>
+            <h4>Ready to Predict</h4>
+            <p>
+              Fill in the weather parameters and click "Predict AQI" to see the
+              air quality forecast.
+            </p>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <!-- Info Cards -->
+    <div class="info-cards">
+      <div class="info-card">
+        <h4>How It Works</h4>
+        <p>
+          Our machine learning model analyzes weather parameters including
+          temperature, humidity, pressure, visibility, and wind speed to predict
+          Air Quality Index values for Kathmandu.
+        </p>
+      </div>
+      <div class="info-card">
+        <h4>Health Guidelines</h4>
+        <p>
+          AQI values help you understand air quality and plan your activities.
+          Lower values indicate cleaner air, while higher values suggest taking
+          precautions for outdoor activities.
+        </p>
+      </div>
+    </div>
   </div>
 </div>
 
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const form = document.getElementById("predictionForm")
+    const loadingSpinner = document.getElementById("loadingSpinner")
+    const submitBtn = form.querySelector(".submit-btn")
 
-
+    form.addEventListener("submit", function (e) {
+      loadingSpinner.style.display = "block"
+      submitBtn.disabled = true
+      submitBtn.textContent = "Predicting..."
+    })
+  })
+</script>
 {% endblock %}
-
-
