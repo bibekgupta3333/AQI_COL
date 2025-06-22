@@ -7,6 +7,11 @@
 	 <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    
+    <!-- Prevent caching of authentication-sensitive content -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
@@ -58,18 +63,16 @@
 		      <li class="nav-item">
 		        <a class="nav-link text-light bg-dark" href="{% url 'main:about-us' %}">About</a>
 		      </li>
+		      {% if user.is_authenticated %}
 		      <li class="nav-item">
 		          <a class="nav-link text-light bg-dark" href="{% url 'main:predict-aqi' %}">Predict</a>
 		       </li>
 		       <li class="nav-item">  
 		          <a class="nav-link text-light bg-dark" href="{% url 'main:past-data' %}">Past Data</a>
-		          
-		        
 		      </li>
+		      {% endif %}
 		      <li class="nav-item">  
 		          <a class="nav-link text-light bg-dark" href="#bottom" target="_self">Contact us</a>
-		          
-		        
 		      </li>
 			  
 			  {% if user.is_authenticated %}
@@ -86,14 +89,10 @@
 
 {% else %}
 <li class="nav-item">  
-	<a class="nav-link text-light bg-dark" href="/signup" target="_self">SignUp</a>
-	
-  
+	<a class="nav-link text-light bg-dark" href="{% url 'main:signup' %}">SignUp</a>
 </li>
 <li class="nav-item">  
-	<a class="nav-link text-light bg-dark" href="/login" target="_self">Login</a>
-	
-  
+	<a class="nav-link text-light bg-dark" href="{% url 'main:login' %}">Login</a>
 </li>
 {% endif %}
 			</ul>
@@ -144,15 +143,17 @@
 							        <p>
 							          <a href="{% url 'main:about-us' %}" class="text-light bg-dark" >About</a>
 							        </p>
+							        {% if user.is_authenticated %}
 							        <p>
-							          <a href="{% url 'main:predict-aqi' %}"class='text-light bg-dark'>Predict</a>
+							          <a href="{% url 'main:predict-aqi' %}" class='text-light bg-dark'>Predict</a>
 							        </p>
 							        <p>
-							          <a href="{% url 'main:past-data' %}"class='text-light bg-dark'>Past_data</a>
+							          <a href="{% url 'main:past-data' %}" class='text-light bg-dark'>Past Data</a>
 							        </p>
 							        <p>
-							          <a href="{% url 'main:download' %}"class='text-light bg-dark'>Download dataset</a>
+							          <a href="{% url 'main:download' %}" class='text-light bg-dark'>Download Dataset</a>
 							        </p>
+							        {% endif %}
 
 							      </div>
 							      <!-- Grid column -->
@@ -195,6 +196,21 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+    
+    <script>
+        // Prevent caching of authentication-sensitive pages
+        if (window.performance && window.performance.navigation.type === 2) {
+            // Page loaded from cache, reload to get fresh content
+            window.location.reload(true);
+        }
+        
+        // Force reload on browser back/forward navigation
+        window.addEventListener('pageshow', function(event) {
+            if (event.persisted) {
+                window.location.reload(true);
+            }
+        });
+    </script>
 
   
 </body>

@@ -19,7 +19,9 @@ from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.http import require_http_methods
-from django.views.decorators.cache import cache_page
+from django.views.decorators.cache import cache_page, cache_control, never_cache
+from django.views.decorators.vary import vary_on_headers
+from django.core.cache import cache
 
 from .models import Dataset, Dataset1, Dataset2, Dataset3, AQIDataset, WeatherData
 
@@ -145,7 +147,8 @@ def fetch_air_quality_data() -> Dict[str, Any]:
     return data
 
 
-@cache_page(60 * 15)  # Cache for 15 minutes
+@vary_on_headers("Cookie")
+@cache_control(max_age=900)  # 15 minutes cache but varies on user session
 def homepage(request):
     """
     Homepage view with real-time air quality data
@@ -173,6 +176,7 @@ def about(request):
     return render(request, "main/about.html")
 
 
+@login_required
 @require_http_methods(["GET", "POST"])
 def past_data(request):
     """
@@ -208,6 +212,7 @@ def past_data(request):
     return render(request, "main/past_data.html", context)
 
 
+@login_required
 def predict(request):
     """Prediction page view"""
     return render(request, "main/predict.html")
@@ -331,6 +336,7 @@ def download(request):
     return render(request, "main/download.html")
 
 
+@never_cache
 @csrf_protect
 @require_http_methods(["GET", "POST"])
 def signup(request):
@@ -365,7 +371,16 @@ def signup(request):
                 auth.login(request, user)
                 messages.success(request, "Account created successfully!")
                 logger.info(f"New user registered: {username}")
-                return redirect("main:home-page")
+
+                # Clear relevant caches after signup and auto-login
+                cache.delete("homepage_cache")
+
+                # Create response with no-cache headers
+                response = redirect("main:home-page")
+                response["Cache-Control"] = "no-cache, no-store, must-revalidate"
+                response["Pragma"] = "no-cache"
+                response["Expires"] = "0"
+                return response
             except Exception as e:
                 logger.error(f"User creation error: {str(e)}")
                 messages.error(request, "An error occurred during registration.")
@@ -373,6 +388,7 @@ def signup(request):
     return render(request, "main/signup.html")
 
 
+@never_cache
 @csrf_protect
 @require_http_methods(["GET", "POST"])
 def login(request):
@@ -395,9 +411,16 @@ def login(request):
                 messages.success(request, f"Welcome back, {username}!")
                 logger.info(f"User logged in: {username}")
 
-                # Redirect to next page if specified
+                # Clear relevant caches after login
+                cache.delete("homepage_cache")
+
+                # Create response with no-cache headers
                 next_page = request.GET.get("next", "main:home-page")
-                return redirect(next_page)
+                response = redirect(next_page)
+                response["Cache-Control"] = "no-cache, no-store, must-revalidate"
+                response["Pragma"] = "no-cache"
+                response["Expires"] = "0"
+                return response
             else:
                 messages.error(request, "Invalid username or password.")
                 logger.warning(f"Failed login attempt for username: {username}")
@@ -405,6 +428,7 @@ def login(request):
     return render(request, "main/login.html")
 
 
+@never_cache
 @login_required
 @require_http_methods(["POST"])
 def logout(request):
@@ -415,7 +439,16 @@ def logout(request):
     auth.logout(request)
     messages.success(request, "You have been logged out successfully.")
     logger.info(f"User logged out: {username}")
-    return redirect("main:home-page")
+
+    # Clear relevant caches after logout
+    cache.delete("homepage_cache")
+
+    # Create response with no-cache headers
+    response = redirect("main:home-page")
+    response["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    response["Pragma"] = "no-cache"
+    response["Expires"] = "0"
+    return response
 
 
 # API endpoints for AJAX requests
