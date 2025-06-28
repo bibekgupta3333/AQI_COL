@@ -46,22 +46,20 @@ Prediction{% endblock %} {% block head_extra %}
   }
 
   .page-title {
-    background: linear-gradient(45deg, #ffffff, #f8f9ff);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    font-size: 2.5rem;
-    font-weight: 700;
-    margin-bottom: 10px;
-    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    color: #ffffff;
+    font-size: 3rem;
+    font-weight: 900;
+    margin-bottom: 12px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
     letter-spacing: -0.5px;
+    text-transform: uppercase;
   }
 
   .page-subtitle {
     color: rgba(255, 255, 255, 0.95);
-    font-size: 1.2rem;
-    font-weight: 400;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    font-size: 1.3rem;
+    font-weight: 500;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
   }
 
   .main-content {
@@ -373,6 +371,52 @@ Prediction{% endblock %} {% block head_extra %}
     }
   }
 
+  /* AQI Thresholds Styling */
+  .aqi-thresholds {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .aqi-thresholds h4 {
+    color: #374151;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 15px;
+    text-align: center;
+  }
+
+  .threshold-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+
+  .threshold-item {
+    padding: 8px;
+    border-radius: 8px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .threshold-item .range {
+    font-size: 0.9rem;
+    font-weight: 700;
+  }
+
+  .threshold-item .label {
+    font-size: 0.8rem;
+    opacity: 0.9;
+  }
+
+  @media (max-width: 768px) {
+    .threshold-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
   /* AQI Category Colors - Modern Gradients */
   .good {
     background: linear-gradient(135deg, #10b981, #059669);
@@ -397,6 +441,14 @@ Prediction{% endblock %} {% block head_extra %}
   .hazardous {
     background: linear-gradient(135deg, #991b1b, #7f1d1d);
     color: white;
+  }
+
+  /* Form help text styling */
+  .form-text {
+    color: #6b7280;
+    font-size: 0.8rem;
+    margin-top: 4px;
+    font-weight: 500;
   }
 </style>
 {% endblock %} {% block content %}
@@ -434,9 +486,13 @@ Prediction{% endblock %} {% block head_extra %}
                 step="0.01"
                 name="T"
                 id="T"
-                placeholder="25.5"
+                placeholder="15.0"
+                min="4"
+                max="35"
+                value="{% if input_data.T %}{{ input_data.T }}{% endif %}"
                 required
               />
+              <small class="form-text">Range: 4°C to 35°C</small>
             </div>
             <div class="form-group">
               <label for="TM">Maximum Temperature (°C)</label>
@@ -445,9 +501,13 @@ Prediction{% endblock %} {% block head_extra %}
                 step="0.01"
                 name="TM"
                 id="TM"
-                placeholder="32.0"
+                placeholder="21.0"
+                min="1"
+                max="35"
+                value="{% if input_data.TM %}{{ input_data.TM }}{% endif %}"
                 required
               />
+              <small class="form-text">Range: 1°C to 35°C</small>
             </div>
           </div>
 
@@ -459,9 +519,13 @@ Prediction{% endblock %} {% block head_extra %}
                 step="0.01"
                 name="Tm"
                 id="Tm"
-                placeholder="18.5"
+                placeholder="1.0"
+                min="-1"
+                max="30"
+                value="{% if input_data.Tm %}{{ input_data.Tm }}{% endif %}"
                 required
               />
+              <small class="form-text">Range: -1°C to 30°C</small>
             </div>
             <div class="form-group">
               <label for="SLP">Sea Level Pressure (hPa)</label>
@@ -470,9 +534,13 @@ Prediction{% endblock %} {% block head_extra %}
                 step="0.01"
                 name="SLP"
                 id="SLP"
-                placeholder="1013.25"
+                placeholder="1010.0"
+                min="1000"
+                max="1025"
+                value="{% if input_data.SLP %}{{ input_data.SLP }}{% endif %}"
                 required
               />
+              <small class="form-text">Range: 1000 to 1025 hPa</small>
             </div>
           </div>
 
@@ -484,9 +552,13 @@ Prediction{% endblock %} {% block head_extra %}
                 step="0.01"
                 name="H"
                 id="H"
-                placeholder="65"
+                placeholder="70"
+                min="0"
+                max="100"
+                value="{% if input_data.H %}{{ input_data.H }}{% endif %}"
                 required
               />
+              <small class="form-text">Range: 0% to 100%</small>
             </div>
             <div class="form-group">
               <label for="VV">Average Visibility (Km)</label>
@@ -495,9 +567,13 @@ Prediction{% endblock %} {% block head_extra %}
                 step="0.01"
                 name="VV"
                 id="VV"
-                placeholder="10.0"
+                placeholder="8.0"
+                min="0.1"
+                max="50"
+                value="{% if input_data.VV %}{{ input_data.VV }}{% endif %}"
                 required
               />
+              <small class="form-text">Range: 0.1 to 50 km</small>
             </div>
           </div>
 
@@ -509,9 +585,13 @@ Prediction{% endblock %} {% block head_extra %}
                 step="0.01"
                 name="V"
                 id="V"
-                placeholder="15.0"
+                placeholder="7.0"
+                min="1"
+                max="10"
+                value="{% if input_data.V %}{{ input_data.V }}{% endif %}"
                 required
               />
+              <small class="form-text">Range: 1 to 10 km/h</small>
             </div>
             <div class="form-group">
               <label for="VM">Max Wind Speed (Km/h)</label>
@@ -520,9 +600,13 @@ Prediction{% endblock %} {% block head_extra %}
                 step="0.01"
                 name="VM"
                 id="VM"
-                placeholder="25.0"
+                placeholder="10.0"
+                min="6"
+                max="24"
+                value="{% if input_data.VM %}{{ input_data.VM }}{% endif %}"
                 required
               />
+              <small class="form-text">Range: 6 to 24 km/h</small>
             </div>
           </div>
 
@@ -542,27 +626,17 @@ Prediction{% endblock %} {% block head_extra %}
         </div>
 
         <div class="results-content">
-          {% if prediction_text %}
-          <div
-            style="
-              background: #e3f2fd;
-              color: #1976d2;
-              padding: 15px;
-              border-radius: 5px;
-              margin-bottom: 20px;
-            "
-          >
-            {{ prediction_text }}
-          </div>
-          {% endif %} {% if actual %}
+          {% if prediction_value %}
           <div class="aqi-display">
-            <div class="aqi-value">{{ actual }}</div>
-            <div class="aqi-category">{{ name }}</div>
+            <div class="aqi-value">{{ prediction_value }}</div>
+            <div class="aqi-category">{{ category_name }}</div>
           </div>
 
-          <div class="aqi-description">{{ descp }}</div>
+          <div class="aqi-description">{{ category_description }}</div>
 
-          <div class="health-badge {{ color }}">{{ name }}</div>
+          <div class="health-badge {{ category_color }}">
+            {{ category_name }}
+          </div>
           {% else %}
           <div class="no-result">
             <i class="fas fa-chart-line"></i>
@@ -573,6 +647,37 @@ Prediction{% endblock %} {% block head_extra %}
             </p>
           </div>
           {% endif %}
+
+          <!-- AQI Thresholds -->
+          <div class="aqi-thresholds">
+            <h4>AQI Thresholds</h4>
+            <div class="threshold-grid">
+              <div class="threshold-item good">
+                <span class="range">0-50</span>
+                <span class="label">Good</span>
+              </div>
+              <div class="threshold-item moderate">
+                <span class="range">51-100</span>
+                <span class="label">Moderate</span>
+              </div>
+              <div class="threshold-item usg">
+                <span class="range">101-150</span>
+                <span class="label">USG</span>
+              </div>
+              <div class="threshold-item unhealthy">
+                <span class="range">151-200</span>
+                <span class="label">Unhealthy</span>
+              </div>
+              <div class="threshold-item very_unhealthy">
+                <span class="range">201-300</span>
+                <span class="label">Very Unhealthy</span>
+              </div>
+              <div class="threshold-item hazardous">
+                <span class="range">300+</span>
+                <span class="label">Hazardous</span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

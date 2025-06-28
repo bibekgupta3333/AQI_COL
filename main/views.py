@@ -235,7 +235,18 @@ def predictaqinew(request):
                 value = request.POST.get(field)
                 if not value:
                     messages.error(request, f"Field {field} is required.")
-                    return render(request, "main/predictnew.html")
+                    # Preserve partial input data
+                    partial_data = {}
+                    for f in required_fields:
+                        val = request.POST.get(f)
+                        if val:
+                            try:
+                                partial_data[f] = float(val)
+                            except ValueError:
+                                partial_data[f] = val
+                    return render(
+                        request, "main/predictnew.html", {"input_data": partial_data}
+                    )
 
                 try:
                     form_data[field] = float(value)
@@ -244,34 +255,81 @@ def predictaqinew(request):
                         request,
                         f"Invalid value for field {field}. Please enter a valid number.",
                     )
-                    return render(request, "main/predictnew.html")
+                    # Preserve partial input data
+                    partial_data = {}
+                    for f in required_fields:
+                        val = request.POST.get(f)
+                        if val:
+                            try:
+                                partial_data[f] = float(val)
+                            except ValueError:
+                                partial_data[f] = val
+                    return render(
+                        request, "main/predictnew.html", {"input_data": partial_data}
+                    )
 
-            # Basic validation ranges
-            if not (0 <= form_data["H"] <= 100):
-                messages.error(request, "Humidity must be between 0 and 100.")
-                return render(request, "main/predictnew.html")
+            # Enhanced validation - check ranges based on training data
+            validation_ranges = {
+                "T": (4.0, 35.0, "Average Temperature"),
+                "TM": (1.0, 35.0, "Maximum Temperature"),
+                "Tm": (-1.0, 30.0, "Minimum Temperature"),
+                "SLP": (1000.0, 1025.0, "Sea Level Pressure"),
+                "H": (0.0, 100.0, "Relative Humidity"),
+                "VV": (0.1, 50.0, "Visibility"),
+                "V": (1.0, 10.0, "Wind Speed"),
+                "VM": (6.0, 24.0, "Max Wind Speed"),
+            }
+
+            for field, (min_val, max_val, field_name) in validation_ranges.items():
+                if not (min_val <= form_data[field] <= max_val):
+                    messages.error(
+                        request,
+                        f"{field_name} must be between {min_val} and {max_val}. "
+                        f"You entered {form_data[field]}.",
+                    )
+                    return render(
+                        request, "main/predictnew.html", {"input_data": form_data}
+                    )
 
             # Load and use the model
             if not os.path.exists(AQIConfig.MODEL_PATH):
                 messages.error(
                     request, "Prediction model not found. Please contact administrator."
                 )
-                return render(request, "main/predictnew.html")
+                return render(
+                    request, "main/predictnew.html", {"input_data": form_data}
+                )
 
             with open(AQIConfig.MODEL_PATH, "rb") as f:
                 model = pickle.load(f)
 
-            # Prepare data for prediction
-            input_array = np.array([list(form_data.values())])
-            prediction = model.predict(input_array)[0]
+            # Prepare data for prediction with proper feature names to avoid sklearn warning
+            input_df = pd.DataFrame([form_data])
+            prediction_array = model.predict(input_df)
+
+            # Convert numpy result to Python float before rounding (handles deprecation warning)
+            prediction_value = (
+                float(prediction_array[0]) if len(prediction_array) > 0 else 0.0
+            )
+
+            # Additional safety check - ensure AQI is positive
+            if prediction_value < 0:
+                messages.error(
+                    request,
+                    "The model predicted a negative AQI value, which indicates the input "
+                    "parameters are outside normal ranges. Please adjust your values and try again.",
+                )
+                return render(
+                    request, "main/predictnew.html", {"input_data": form_data}
+                )
 
             # Get AQI category
             category_name, category_color, category_description = get_aqi_category(
-                prediction
+                prediction_value
             )
 
             context = {
-                "prediction_value": round(prediction, 2),
+                "prediction_value": round(prediction_value, 2),
                 "category_name": category_name,
                 "category_color": category_color,
                 "category_description": category_description,
@@ -280,7 +338,7 @@ def predictaqinew(request):
 
             # Log prediction for monitoring
             logger.info(
-                f"AQI Prediction: {prediction} for user {request.user.username}"
+                f"AQI Prediction: {prediction_value} for user {request.user.username}"
             )
 
             return render(request, "main/predictnew.html", context)
@@ -289,6 +347,18 @@ def predictaqinew(request):
             logger.error(f"Prediction error: {str(e)}")
             messages.error(
                 request, "An error occurred during prediction. Please try again."
+            )
+            # Preserve input data even on exceptions
+            preserved_data = {}
+            for field in ["T", "TM", "Tm", "SLP", "H", "VV", "V", "VM"]:
+                value = request.POST.get(field)
+                if value:
+                    try:
+                        preserved_data[field] = float(value)
+                    except ValueError:
+                        preserved_data[field] = value
+            return render(
+                request, "main/predictnew.html", {"input_data": preserved_data}
             )
 
     return render(request, "main/predictnew.html")
