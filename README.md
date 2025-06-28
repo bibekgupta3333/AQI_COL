@@ -329,7 +329,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - **Author**: Bibek Gupta
 - **Email**: bibekgupta3333@gmail.com
-- **GitHub**: [@bibekg](https://github.com/bibekgupta3333)
+- **GitHub**: [@bibekgupta3333](https://github.com/bibekgupta3333)
 
 ## 🙏 Acknowledgments
 
