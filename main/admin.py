@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import Dataset, Dataset1, Dataset2, Dataset3, whole_dataset
+from .models import Dataset, Dataset1, Dataset2, Dataset3, WeatherData
 
 
 # @admin.register(Dataset, Dataset1, Dataset2, Dataset3, whole_dataset)
@@ -12,7 +12,7 @@ admin.site.register(Dataset)
 admin.site.register(Dataset1)
 admin.site.register(Dataset2)
 admin.site.register(Dataset3)
-admin.site.register(whole_dataset)
+admin.site.register(WeatherData)
 
 
 # @admin.register(Dataset)
