@@ -102,32 +102,124 @@ AQI_COL/
    poetry shell
    ```
 
-4. **Navigate to the Django project**:
-
-   ```bash
-   cd Air-Quality-Prediction/airprediction
-   ```
-
-5. **Set up the database**:
+4. **Set up the database**:
 
    ```bash
    python manage.py migrate
    ```
 
-6. **Create a superuser (optional)**:
+5. **Create a superuser (optional)**:
 
    ```bash
    python manage.py createsuperuser
    ```
 
-7. **Run the development server**:
+### Starting the Development Server
+
+1. **Ensure you're in the project directory**:
+
+   ```bash
+   cd AQI_COL
+   ```
+
+2. **Activate the virtual environment** (if not already activated):
+
+   ```bash
+   poetry shell
+   ```
+
+3. **Start the development server**:
 
    ```bash
    python manage.py runserver
    ```
 
-8. **Access the application**:
-   Open your web browser and navigate to `http://127.0.0.1:8000/`
+4. **Access the application**:
+   - Open your web browser and navigate to `http://127.0.0.1:8000/`
+   - Admin interface is available at `http://127.0.0.1:8000/admin/`
+
+### Data Management Commands
+
+The project provides several commands for managing data:
+
+1. **Load Weather Data**:
+
+   ```bash
+   python manage.py load_weather_data Data/NewData
+   ```
+
+   Options:
+
+   - `--dry-run`: Show what would be done without actually loading data
+
+   This command:
+
+   - Processes hourly weather and AQI data
+   - Handles temperature, humidity, wind, visibility, and AQI measurements
+   - Creates unique records for each hour
+   - Stores data in the WeatherData model
+
+2. **Load AQI Data**:
+
+   ```bash
+   python manage.py load_aqi_data
+   ```
+
+   Options:
+
+   - `--csv-path PATH`: Specify custom data directory
+   - `--file FILENAME`: Load specific CSV file
+   - `--year YEAR`: Load data for specific year (2018-2023)
+   - `--clear`: Clear existing data before loading
+   - `--dry-run`: Test run without saving
+
+   This command:
+
+   - Processes historical AQI data from 2018-2023
+   - Calculates daily averages from hourly readings
+   - Stores data in the AQIDataset model
+
+3. **Purge Data**:
+
+   ```bash
+   python manage.py purge_data
+   ```
+
+   Options:
+
+   - `--force`: Skip confirmation prompts
+   - `--weather-only`: Only purge WeatherData table
+   - `--dataset-only`: Only purge Dataset tables
+
+   This command:
+
+   - Safely removes data from specified tables
+   - Shows count of records to be deleted
+   - Uses database transactions for safety
+   - Requires confirmation unless --force is used
+
+### Typical Data Loading Workflow
+
+1. **Clean existing data** (if needed):
+
+   ```bash
+   python manage.py purge_data --force
+   ```
+
+2. **Load weather data**:
+
+   ```bash
+   python manage.py load_weather_data Data/NewData
+   ```
+
+3. **Load historical AQI data**:
+
+   ```bash
+   python manage.py load_aqi_data
+   ```
+
+4. **Verify data loading**:
+   Access the admin interface at `http://127.0.0.1:8000/admin/` to check the loaded records.
 
 ## 📈 Usage
 
@@ -237,7 +329,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - **Author**: Bibek Gupta
 - **Email**: bibekgupta3333@gmail.com
-- **GitHub**: [@bibekg](https://github.com/bibekg)
+- **GitHub**: [@bibekgupta3333](https://github.com/bibekgupta3333)
 
 ## 🙏 Acknowledgments
 

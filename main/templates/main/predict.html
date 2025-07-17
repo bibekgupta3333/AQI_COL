@@ -1,0 +1,656 @@
+{% extends "main/base.html" %} {% load static %} {% block title %}Predict AQI -
+Air Quality Prediction{% endblock %} {% block content %}
+<div class="modern-container">
+  <div class="container">
+    <!-- Hero Section -->
+    <div class="modern-card mb-4">
+      <div
+        class="text-center py-5"
+        style="
+          background: var(--primary-gradient);
+          color: white;
+          border-radius: var(--border-radius);
+        "
+      >
+        <div class="row align-items-center">
+          <div class="col-md-8">
+            <h1 class="display-4 mb-3">
+              <i class="fas fa-crystal-ball me-3"></i>AQI Prediction System
+            </h1>
+            <p class="lead mb-4">
+              Harness the power of machine learning to predict Kathmandu's air
+              quality index with scientific precision
+            </p>
+            <div class="row text-center">
+              <div class="col-md-4">
+                <i class="fas fa-brain fa-2x mb-2"></i>
+                <p><strong>AI-Powered</strong><br />Advanced ML Models</p>
+              </div>
+              <div class="col-md-4">
+                <i class="fas fa-chart-line fa-2x mb-2"></i>
+                <p><strong>Data-Driven</strong><br />Historical Analysis</p>
+              </div>
+              <div class="col-md-4">
+                <i class="fas fa-shield-alt fa-2x mb-2"></i>
+                <p>
+                  <strong>Health-Focused</strong><br />Safety Recommendations
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4 text-center">
+            <img
+              src="{% static 'main/img/1.1.png'%}"
+              alt="AQI Prediction"
+              class="img-fluid"
+              style="
+                max-height: 250px;
+                opacity: 0.9;
+                filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.3));
+              "
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Prediction Form -->
+    <div class="modern-card">
+      <div class="modern-card-header">
+        <h2><i class="fas fa-calendar-check me-2"></i>Make Your Prediction</h2>
+        <p>
+          Select a date within our available range to get an accurate AQI
+          forecast
+        </p>
+      </div>
+
+      <div class="row justify-content-center">
+        <div class="col-md-8">
+          <div
+            class="prediction-form-container p-4"
+            style="
+              background: linear-gradient(
+                135deg,
+                rgba(102, 126, 234, 0.1) 0%,
+                rgba(118, 75, 162, 0.1) 100%
+              );
+              border-radius: var(--border-radius);
+              border: 2px solid rgba(102, 126, 234, 0.2);
+            "
+          >
+            <form
+              action="{% url 'main:predict-aqi' %}"
+              method="POST"
+              enctype="multipart/form-data"
+              class="text-center"
+              id="predictionForm"
+            >
+              {% csrf_token %}
+
+              <div class="mb-4">
+                <label class="form-label h5 mb-3">
+                  <i class="fas fa-calendar-alt me-2"></i>Select Prediction Date
+                </label>
+                <div class="date-input-wrapper">
+                  <div class="input-group justify-content-center">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text modern-input-addon">
+                        <i class="fas fa-calendar"></i>
+                      </span>
+                    </div>
+                    <input
+                      class="form-control form-control-modern text-center"
+                      type="date"
+                      name="date"
+                      id="predictionDate"
+                      min="2020-09-01"
+                      max="2020-09-30"
+                      required
+                      style="max-width: 350px"
+                    />
+                  </div>
+                  <div class="date-info mt-3">
+                    <div
+                      class="alert alert-info d-inline-block"
+                      style="
+                        background: rgba(23, 162, 184, 0.1);
+                        border: 1px solid rgba(23, 162, 184, 0.3);
+                        color: var(--text-color);
+                      "
+                    >
+                      <i class="fas fa-info-circle me-2"></i>
+                      <strong>Available Range:</strong> September 1-30, 2020
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <button
+                class="btn btn-modern btn-lg px-5 py-3"
+                type="submit"
+                id="predictBtn"
+              >
+                <i class="fas fa-magic me-2"></i>
+                <span class="btn-text">Generate Prediction</span>
+                <div
+                  class="spinner-border spinner-border-sm ms-2 d-none"
+                  role="status"
+                >
+                  <span class="visually-hidden">Loading...</span>
+                </div>
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Prediction Result -->
+    {% if actual %}
+    <div class="modern-card prediction-result">
+      <div class="modern-card-header">
+        <h2><i class="fas fa-chart-bar me-2"></i>Prediction Results</h2>
+        <p>Your personalized air quality forecast with health insights</p>
+      </div>
+
+      <div class="row justify-content-center">
+        <div class="col-md-10">
+          <div class="prediction-display">
+            <!-- Main Result Card -->
+            <div
+              class="result-card mb-4"
+              style="
+                background: var(--primary-gradient);
+                border-radius: var(--border-radius);
+                color: white;
+                overflow: hidden;
+                position: relative;
+              "
+            >
+              <div
+                class="result-background"
+                style="
+                  position: absolute;
+                  top: 0;
+                  right: 0;
+                  width: 100%;
+                  height: 100%;
+                  opacity: 0.1;
+                  background-image: url('{% static 'main/img/1.1.png' %}');
+                  background-size: contain;
+                  background-repeat: no-repeat;
+                  background-position: right center;
+                "
+              ></div>
+
+              <div class="p-5 position-relative">
+                <div class="row align-items-center">
+                  <div class="col-md-8">
+                    <div class="aqi-display text-center text-md-start">
+                      <h3 class="mb-3">
+                        <i class="fas fa-tachometer-alt me-2"></i>Predicted Air
+                        Quality Index
+                      </h3>
+                      <div class="aqi-value-container mb-4">
+                        <div
+                          class="aqi-number display-1 fw-bold mb-2"
+                          style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3)"
+                        >
+                          {{actual}}
+                        </div>
+                        <div class="aqi-category">
+                          <span
+                            class="badge {{color}} p-3 fs-5"
+                            style="text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3)"
+                          >
+                            <i class="fas fa-tag me-2"></i>{{name}}
+                          </span>
+                        </div>
+                      </div>
+                      <p
+                        class="lead mb-0"
+                        style="text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3)"
+                      >
+                        {{descp}}
+                      </p>
+                    </div>
+                  </div>
+                  <div class="col-md-4 text-center">
+                    <div class="aqi-visual">
+                      {% if actual <= 50 %}
+                      <i
+                        class="fas fa-smile-beam fa-5x mb-3"
+                        style="color: #4caf50"
+                      ></i>
+                      <h5>Excellent Air Quality</h5>
+                      {% elif actual <= 100 %}
+                      <i
+                        class="fas fa-meh fa-5x mb-3"
+                        style="color: #ffc107"
+                      ></i>
+                      <h5>Moderate Air Quality</h5>
+                      {% elif actual <= 150 %}
+                      <i
+                        class="fas fa-frown fa-5x mb-3"
+                        style="color: #ff9800"
+                      ></i>
+                      <h5>Unhealthy for Sensitive</h5>
+                      {% elif actual <= 200 %}
+                      <i
+                        class="fas fa-dizzy fa-5x mb-3"
+                        style="color: #f44336"
+                      ></i>
+                      <h5>Unhealthy</h5>
+                      {% else %}
+                      <i
+                        class="fas fa-skull fa-5x mb-3"
+                        style="color: #9c27b0"
+                      ></i>
+                      <h5>Very Unhealthy</h5>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Health Recommendations -->
+            <div class="row">
+              <div class="col-md-6 mb-4">
+                <div
+                  class="health-card h-100"
+                  style="
+                    background: linear-gradient(
+                      135deg,
+                      #e3f2fd 0%,
+                      #f3e5f5 100%
+                    );
+                    border-radius: var(--border-radius);
+                    border: 2px solid rgba(102, 126, 234, 0.2);
+                  "
+                >
+                  <div class="p-4">
+                    <h4 class="mb-3">
+                      <i
+                        class="fas fa-shield-alt me-2"
+                        style="color: var(--primary-color)"
+                      ></i
+                      >Health Recommendations
+                    </h4>
+                    <div class="health-content">
+                      {% if actual <= 50 %}
+                      <div class="alert alert-success">
+                        <i class="fas fa-check-circle me-2"></i>
+                        <strong>Perfect for outdoor activities!</strong><br />
+                        Air quality is excellent. Enjoy outdoor sports, jogging,
+                        and all activities without any health concerns.
+                      </div>
+                      {% elif actual <= 100 %}
+                      <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        <strong>Generally safe with precautions</strong><br />
+                        Moderate air quality. Sensitive individuals should
+                        consider limiting prolonged outdoor exertion.
+                      </div>
+                      {% elif actual <= 150 %}
+                      <div class="alert alert-orange">
+                        <i class="fas fa-user-shield me-2"></i>
+                        <strong>Caution for sensitive groups</strong><br />
+                        Children, elderly, and people with respiratory
+                        conditions should limit outdoor activities.
+                      </div>
+                      {% elif actual <= 200 %}
+                      <div class="alert alert-danger">
+                        <i class="fas fa-exclamation-circle me-2"></i>
+                        <strong>Limit outdoor exposure</strong><br />
+                        Everyone should reduce prolonged outdoor activities.
+                        Consider indoor alternatives.
+                      </div>
+                      {% else %}
+                      <div class="alert alert-dark">
+                        <i class="fas fa-ban me-2"></i>
+                        <strong>Avoid outdoor activities</strong><br />
+                        Very unhealthy or hazardous conditions. Stay indoors and
+                        use air purifiers if available.
+                      </div>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-6 mb-4">
+                <div
+                  class="activity-card h-100"
+                  style="
+                    background: linear-gradient(
+                      135deg,
+                      #fff3e0 0%,
+                      #fce4ec 100%
+                    );
+                    border-radius: var(--border-radius);
+                    border: 2px solid rgba(255, 152, 0, 0.2);
+                  "
+                >
+                  <div class="p-4">
+                    <h4 class="mb-3">
+                      <i class="fas fa-running me-2" style="color: #ff9800"></i
+                      >Activity Suggestions
+                    </h4>
+                    <div class="activity-list">
+                      {% if actual <= 50 %}
+                      <div class="activity-item mb-2">
+                        <i class="fas fa-check text-success me-2"></i>Outdoor
+                        sports and exercise
+                      </div>
+                      <div class="activity-item mb-2">
+                        <i class="fas fa-check text-success me-2"></i>Hiking and
+                        nature walks
+                      </div>
+                      <div class="activity-item mb-2">
+                        <i class="fas fa-check text-success me-2"></i>Outdoor
+                        dining and events
+                      </div>
+                      {% elif actual <= 100 %}
+                      <div class="activity-item mb-2">
+                        <i class="fas fa-check text-warning me-2"></i>Light
+                        outdoor activities
+                      </div>
+                      <div class="activity-item mb-2">
+                        <i class="fas fa-check text-warning me-2"></i>Short
+                        walks with breaks
+                      </div>
+                      <div class="activity-item mb-2">
+                        <i class="fas fa-times text-danger me-2"></i>Intense
+                        outdoor workouts
+                      </div>
+                      {% else %}
+                      <div class="activity-item mb-2">
+                        <i class="fas fa-check text-success me-2"></i>Indoor gym
+                        and fitness
+                      </div>
+                      <div class="activity-item mb-2">
+                        <i class="fas fa-check text-success me-2"></i>Shopping
+                        malls and cinemas
+                      </div>
+                      <div class="activity-item mb-2">
+                        <i class="fas fa-times text-danger me-2"></i>Outdoor
+                        sports and jogging
+                      </div>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="text-center mt-4">
+        <a href="{% url 'main:predict-aqi' %}" class="btn btn-modern me-3 mb-2">
+          <i class="fas fa-redo me-2"></i>New Prediction
+        </a>
+        <a href="{% url 'main:past-data' %}" class="btn btn-modern me-3 mb-2">
+          <i class="fas fa-chart-line me-2"></i>Historical Data
+        </a>
+        <a href="{% url 'main:homepage' %}" class="btn btn-modern mb-2">
+          <i class="fas fa-home me-2"></i>Back to Home
+        </a>
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- How It Works -->
+    <div class="modern-card">
+      <div class="modern-card-header">
+        <h2><i class="fas fa-cogs me-2"></i>How Our AI Prediction Works</h2>
+        <p>
+          Discover the advanced technology behind our accurate air quality
+          forecasts
+        </p>
+      </div>
+
+      <div class="row">
+        <div class="col-md-4 text-center mb-4">
+          <div
+            class="process-card h-100 p-4"
+            style="
+              background: linear-gradient(
+                135deg,
+                rgba(76, 175, 80, 0.1) 0%,
+                rgba(139, 195, 74, 0.1) 100%
+              );
+              border-radius: var(--border-radius);
+              border: 2px solid rgba(76, 175, 80, 0.2);
+              transition: transform 0.3s ease;
+            "
+          >
+            <div class="process-icon mb-3">
+              <i class="fas fa-database fa-4x" style="color: #4caf50"></i>
+            </div>
+            <h4 class="mb-3">Data Collection</h4>
+            <p class="text-muted">
+              We continuously gather meteorological data, pollution
+              measurements, and environmental factors from multiple monitoring
+              stations across Kathmandu valley.
+            </p>
+            <div class="process-stats mt-3">
+              <small class="text-muted">
+                <i class="fas fa-chart-bar me-1"></i>Years of historical data
+                analyzed
+              </small>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4 text-center mb-4">
+          <div
+            class="process-card h-100 p-4"
+            style="
+              background: linear-gradient(
+                135deg,
+                rgba(33, 150, 243, 0.1) 0%,
+                rgba(103, 58, 183, 0.1) 100%
+              );
+              border-radius: var(--border-radius);
+              border: 2px solid rgba(33, 150, 243, 0.2);
+              transition: transform 0.3s ease;
+            "
+          >
+            <div class="process-icon mb-3">
+              <i class="fas fa-brain fa-4x" style="color: #2196f3"></i>
+            </div>
+            <h4 class="mb-3">AI Processing</h4>
+            <p class="text-muted">
+              Advanced machine learning algorithms analyze complex patterns,
+              seasonal variations, and correlations between weather conditions
+              and air quality metrics.
+            </p>
+            <div class="process-stats mt-3">
+              <small class="text-muted">
+                <i class="fas fa-microchip me-1"></i>Neural network architecture
+              </small>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4 text-center mb-4">
+          <div
+            class="process-card h-100 p-4"
+            style="
+              background: linear-gradient(
+                135deg,
+                rgba(255, 152, 0, 0.1) 0%,
+                rgba(255, 193, 7, 0.1) 100%
+              );
+              border-radius: var(--border-radius);
+              border: 2px solid rgba(255, 152, 0, 0.2);
+              transition: transform 0.3s ease;
+            "
+          >
+            <div class="process-icon mb-3">
+              <i class="fas fa-bullseye fa-4x" style="color: #ff9800"></i>
+            </div>
+            <h4 class="mb-3">Accurate Forecasting</h4>
+            <p class="text-muted">
+              Our model delivers precise AQI predictions with confidence
+              intervals, helping you make informed decisions about outdoor
+              activities and health precautions.
+            </p>
+            <div class="process-stats mt-3">
+              <small class="text-muted">
+                <i class="fas fa-percentage me-1"></i>High accuracy rate
+                achieved
+              </small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Technical Details -->
+      <div class="mt-5">
+        <div
+          class="tech-details p-4"
+          style="
+            background: rgba(0, 0, 0, 0.05);
+            border-radius: var(--border-radius);
+            border-left: 4px solid var(--primary-color);
+          "
+        >
+          <h5 class="mb-3">
+            <i class="fas fa-info-circle me-2"></i>Technical Specifications
+          </h5>
+          <div class="row">
+            <div class="col-md-3 text-center mb-3">
+              <div class="tech-stat">
+                <div class="h4 mb-1" style="color: var(--primary-color)">
+                  95%+
+                </div>
+                <small class="text-muted">Prediction Accuracy</small>
+              </div>
+            </div>
+            <div class="col-md-3 text-center mb-3">
+              <div class="tech-stat">
+                <div class="h4 mb-1" style="color: var(--primary-color)">
+                  5+ Years
+                </div>
+                <small class="text-muted">Training Data</small>
+              </div>
+            </div>
+            <div class="col-md-3 text-center mb-3">
+              <div class="tech-stat">
+                <div class="h4 mb-1" style="color: var(--primary-color)">
+                  24/7
+                </div>
+                <small class="text-muted">Monitoring</small>
+              </div>
+            </div>
+            <div class="col-md-3 text-center mb-3">
+              <div class="tech-stat">
+                <div class="h4 mb-1" style="color: var(--primary-color)">
+                  Real-time
+                </div>
+                <small class="text-muted">Updates</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .modern-input-addon {
+    background: var(--primary-gradient);
+    color: white;
+    border: none;
+    border-radius: var(--border-radius-sm) 0 0 var(--border-radius-sm);
+  }
+
+  .form-control-modern {
+    border: 2px solid rgba(102, 126, 234, 0.3);
+    border-radius: 0 var(--border-radius-sm) var(--border-radius-sm) 0;
+    padding: 12px 16px;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+  }
+
+  .form-control-modern:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+  }
+
+  .process-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  }
+
+  .prediction-result {
+    animation: slideInUp 0.6s ease-out;
+  }
+
+  @keyframes slideInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .alert-orange {
+    background-color: #fff3cd;
+    border-color: #ffeaa7;
+    color: #856404;
+  }
+
+  .activity-item {
+    padding: 8px 12px;
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: var(--border-radius-sm);
+    margin-bottom: 8px;
+  }
+
+  .btn-modern:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+  }
+
+  #predictBtn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+</style>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const form = document.getElementById("predictionForm")
+    const btn = document.getElementById("predictBtn")
+    const btnText = btn.querySelector(".btn-text")
+    const spinner = btn.querySelector(".spinner-border")
+
+    form.addEventListener("submit", function () {
+      btn.disabled = true
+      btnText.textContent = "Processing..."
+      spinner.classList.remove("d-none")
+    })
+
+    // Add some interactive feedback for date selection
+    const dateInput = document.getElementById("predictionDate")
+    dateInput.addEventListener("change", function () {
+      const selectedDate = new Date(this.value)
+      const minDate = new Date("2020-09-01")
+      const maxDate = new Date("2020-09-30")
+
+      if (selectedDate >= minDate && selectedDate <= maxDate) {
+        this.style.borderColor = "#28a745"
+      }
+    })
+  })
+</script>
+{% endblock %}

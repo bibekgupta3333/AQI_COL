@@ -1,0 +1,310 @@
+{% extends "main/base.html" %} {% load static %} {% block title %}Login - Air
+Quality Prediction{% endblock %} {% block head_extra %}
+<style>
+  .auth-container {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 2rem 0;
+  }
+
+  .auth-card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    padding: 3rem;
+    max-width: 400px;
+    width: 100%;
+    margin: 0 auto;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .auth-header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .auth-header h1 {
+    color: #333;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    font-size: 2rem;
+  }
+
+  .auth-header p {
+    color: #666;
+    margin-bottom: 0;
+  }
+
+  .auth-form .form-group {
+    position: relative;
+    margin-bottom: 1.5rem;
+  }
+
+  .auth-form .form-control {
+    border: 2px solid #e1e5e9;
+    border-radius: 12px;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background: #f8f9fa;
+  }
+
+  .auth-form .form-control:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+    background: white;
+  }
+
+  .auth-form .form-control::placeholder {
+    color: #adb5bd;
+  }
+
+  .auth-form .input-icon {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #6c757d;
+    z-index: 10;
+  }
+
+  .auth-form .form-control.with-icon {
+    padding-left: 2.5rem;
+  }
+
+  .auth-btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    border-radius: 12px;
+    color: white;
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    width: 100%;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+
+  .auth-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+    color: white;
+  }
+
+  .auth-btn:active {
+    transform: translateY(0);
+  }
+
+  .auth-links {
+    text-align: center;
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #e9ecef;
+  }
+
+  .auth-links a {
+    color: #667eea;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+  }
+
+  .auth-links a:hover {
+    color: #764ba2;
+    text-decoration: none;
+  }
+
+  .alert-custom {
+    border-radius: 12px;
+    border: none;
+    margin-bottom: 1.5rem;
+    padding: 1rem 1.25rem;
+  }
+
+  .alert-error {
+    background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+    color: white;
+  }
+
+  .alert-success {
+    background: linear-gradient(135deg, #51cf66, #40c057);
+    color: white;
+  }
+
+  .alert-info {
+    background: linear-gradient(135deg, #74c0fc, #339af0);
+    color: white;
+  }
+
+  .password-toggle {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    border: none;
+    background: none;
+    color: #6c757d;
+    cursor: pointer;
+    z-index: 10;
+  }
+
+  .loading-spinner {
+    display: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #ffffff;
+    border-top: 2px solid transparent;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-right: 0.5rem;
+  }
+
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  @media (max-width: 576px) {
+    .auth-card {
+      margin: 1rem;
+      padding: 2rem 1.5rem;
+    }
+
+    .auth-header h1 {
+      font-size: 1.5rem;
+    }
+  }
+</style>
+{% endblock %} {% block content %}
+<div class="auth-container">
+  <div class="container">
+    <div class="row justify-content-center align-items-center min-vh-100">
+      <div class="col-md-6 col-lg-5">
+        <div class="auth-card">
+          <div class="auth-header">
+            <h1>Welcome Back</h1>
+            <p>Sign in to your account to continue</p>
+          </div>
+
+          <!-- Display Django Messages -->
+          {% if messages %} {% for message in messages %}
+          <div
+            class="alert alert-custom alert-{% if message.tags == 'error' %}error{% else %}{{ message.tags }}{% endif %}"
+            role="alert"
+          >
+            <i
+              class="fas fa-{% if message.tags == 'error' %}exclamation-circle{% elif message.tags == 'success' %}check-circle{% else %}info-circle{% endif %} mr-2"
+            ></i>
+            {{ message }}
+          </div>
+          {% endfor %} {% endif %}
+
+          <form
+            action="{% url 'main:login' %}"
+            method="POST"
+            class="auth-form"
+            id="loginForm"
+          >
+            {% csrf_token %}
+
+            <div class="form-group">
+              <i class="fas fa-user input-icon"></i>
+              <input
+                type="text"
+                name="Username"
+                class="form-control with-icon"
+                placeholder="Enter your username"
+                required
+                autofocus
+                autocomplete="username"
+                maxlength="150"
+              />
+            </div>
+
+            <div class="form-group">
+              <i class="fas fa-lock input-icon"></i>
+              <input
+                type="password"
+                name="Password"
+                class="form-control with-icon"
+                placeholder="Enter your password"
+                required
+                autocomplete="current-password"
+                id="passwordField"
+              />
+              <button
+                type="button"
+                class="password-toggle"
+                onclick="togglePassword()"
+              >
+                <i class="fas fa-eye" id="passwordIcon"></i>
+              </button>
+            </div>
+
+            <button type="submit" class="auth-btn" id="loginBtn">
+              <span class="loading-spinner" id="loadingSpinner"></span>
+              <span id="btnText">Sign In</span>
+            </button>
+          </form>
+
+          <div class="auth-links">
+            <p class="mb-2">
+              Don't have an account?
+              <a href="{% url 'main:signup' %}">Sign up here</a>
+            </p>
+            <a href="{% url 'main:home-page' %}" class="text-muted">
+              <i class="fas fa-arrow-left mr-1"></i> Back to Home
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function togglePassword() {
+    const passwordField = document.getElementById("passwordField")
+    const passwordIcon = document.getElementById("passwordIcon")
+
+    if (passwordField.type === "password") {
+      passwordField.type = "text"
+      passwordIcon.classList.remove("fa-eye")
+      passwordIcon.classList.add("fa-eye-slash")
+    } else {
+      passwordField.type = "password"
+      passwordIcon.classList.remove("fa-eye-slash")
+      passwordIcon.classList.add("fa-eye")
+    }
+  }
+
+  // Form submission with loading state
+  document.getElementById("loginForm").addEventListener("submit", function () {
+    const btn = document.getElementById("loginBtn")
+    const spinner = document.getElementById("loadingSpinner")
+    const btnText = document.getElementById("btnText")
+
+    btn.disabled = true
+    spinner.style.display = "inline-block"
+    btnText.textContent = "Signing In..."
+  })
+
+  // Auto-hide alerts after 5 seconds
+  document.addEventListener("DOMContentLoaded", function () {
+    const alerts = document.querySelectorAll(".alert-custom")
+    alerts.forEach(function (alert) {
+      setTimeout(function () {
+        alert.style.opacity = "0"
+        setTimeout(function () {
+          alert.remove()
+        }, 300)
+      }, 5000)
+    })
+  })
+</script>
+{% endblock %}

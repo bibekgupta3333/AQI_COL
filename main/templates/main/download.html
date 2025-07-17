@@ -1,0 +1,185 @@
+{% extends "main/base.html" %} {% load static %} {% block title %}Download
+Dataset - Air Quality Prediction{% endblock %} {% block content %}
+<div class="modern-container">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-8 col-lg-6">
+        <div class="modern-card text-center">
+          <div class="modern-card-header">
+            <h1><i class="fas fa-download me-2"></i>Download Dataset</h1>
+            <p>
+              Access our comprehensive air quality dataset for research and
+              analysis
+            </p>
+          </div>
+
+          <!-- Dataset Information -->
+          <div class="mb-4">
+            <div
+              class="p-4"
+              style="
+                background: rgba(255, 255, 255, 0.7);
+                border-radius: var(--border-radius-sm);
+              "
+            >
+              <h4>
+                <i class="fas fa-database me-2 text-primary"></i>Air Quality
+                Dataset
+              </h4>
+              <p class="text-muted mb-3">
+                Comprehensive collection of air quality measurements from
+                Kathmandu
+              </p>
+
+              <div class="row text-center">
+                <div class="col-4">
+                  <i
+                    class="fas fa-calendar-alt text-primary"
+                    style="font-size: 2rem"
+                  ></i>
+                  <h6 class="mt-2">2018-2021</h6>
+                  <small class="text-muted">4 Years of Data</small>
+                </div>
+                <div class="col-4">
+                  <i
+                    class="fas fa-chart-line text-primary"
+                    style="font-size: 2rem"
+                  ></i>
+                  <h6 class="mt-2">Daily Records</h6>
+                  <small class="text-muted">Continuous Monitoring</small>
+                </div>
+                <div class="col-4">
+                  <i
+                    class="fas fa-file-csv text-primary"
+                    style="font-size: 2rem"
+                  ></i>
+                  <h6 class="mt-2">CSV Format</h6>
+                  <small class="text-muted">Easy to Use</small>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Dataset Features -->
+          <div class="mb-4">
+            <h5><i class="fas fa-list-check me-2"></i>Dataset Includes</h5>
+            <div class="row">
+              <div class="col-md-6 text-start">
+                <ul class="list-unstyled">
+                  <li>
+                    <i class="fas fa-check text-success me-2"></i>PM2.5
+                    Measurements
+                  </li>
+                  <li>
+                    <i class="fas fa-check text-success me-2"></i>PM10
+                    Measurements
+                  </li>
+                  <li>
+                    <i class="fas fa-check text-success me-2"></i>Ozone (O₃)
+                    Levels
+                  </li>
+                </ul>
+              </div>
+              <div class="col-md-6 text-start">
+                <ul class="list-unstyled">
+                  <li>
+                    <i class="fas fa-check text-success me-2"></i>Weather
+                    Conditions
+                  </li>
+                  <li>
+                    <i class="fas fa-check text-success me-2"></i>AQI
+                    Classifications
+                  </li>
+                  <li>
+                    <i class="fas fa-check text-success me-2"></i>Temporal
+                    Analysis Data
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- Download Button -->
+          <div class="mb-4">
+            <a
+              href="javascript:{document.getElementById('download').submit()}"
+              class="btn btn-modern btn-lg"
+            >
+              <i class="fas fa-download me-2"></i>Download Dataset
+            </a>
+            <form
+              id="download"
+              method="POST"
+              action="{% url 'main:download' %}"
+              style="display: none"
+            >
+              {% csrf_token %}
+              <input type="hidden" />
+            </form>
+          </div>
+
+          <!-- Usage Information -->
+          <div
+            style="
+              background: rgba(255, 255, 255, 0.5);
+              border-radius: var(--border-radius-sm);
+              padding: 1.5rem;
+            "
+          >
+            <h5><i class="fas fa-info-circle me-2"></i>Usage Guidelines</h5>
+            <p class="text-start mb-2">
+              <i class="fas fa-graduation-cap me-2 text-primary"></i>
+              <strong>Academic Use:</strong> Ideal for research, thesis work,
+              and academic projects.
+            </p>
+            <p class="text-start mb-2">
+              <i class="fas fa-chart-bar me-2 text-primary"></i>
+              <strong>Data Analysis:</strong> Perfect for statistical analysis
+              and visualization projects.
+            </p>
+            <p class="text-start mb-2">
+              <i class="fas fa-robot me-2 text-primary"></i>
+              <strong>Machine Learning:</strong> Suitable for training
+              predictive models and algorithms.
+            </p>
+            <p class="text-start mb-0">
+              <i class="fas fa-heart me-2 text-danger"></i>
+              <strong>Attribution:</strong> Please cite this dataset in your
+              research and publications.
+            </p>
+          </div>
+
+          <!-- Additional Resources -->
+          <div class="mt-4 pt-3 border-top">
+            <h6>
+              <i class="fas fa-external-link-alt me-2"></i>Related Resources
+            </h6>
+            <div class="d-flex justify-content-center flex-wrap gap-2">
+              <a
+                href="{% url 'main:about-us' %}"
+                class="btn btn-outline-primary btn-sm"
+              >
+                <i class="fas fa-info me-1"></i>About AQI
+              </a>
+              {% if user.is_authenticated %}
+              <a
+                href="{% url 'main:predict-aqi' %}"
+                class="btn btn-outline-primary btn-sm"
+              >
+                <i class="fas fa-crystal-ball me-1"></i>Try Prediction
+              </a>
+              <a
+                href="{% url 'main:past-data' %}"
+                class="btn btn-outline-primary btn-sm"
+              >
+                <i class="fas fa-chart-line me-1"></i>View Data
+              </a>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
